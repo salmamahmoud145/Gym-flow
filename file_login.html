@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log in - GymFlow</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <a href="index.html#plans">Plans</a>
+      <a class="btn btn-accent btn-sm" href="register.html">Register</a>
+    </nav>
+  </div>
+</header>
+
+<main class="auth">
+  <div class="auth-card">
+    <h1>Welcome back</h1>
+    <p class="muted">Log in to book classes and manage your membership.</p>
+
+    <div class="alert alert-bad hidden" id="login-error">
+      Wrong email or password. You have 3 attempts left before the account locks for 15 minutes.
+    </div>
+
+    <form id="login-form" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input class="input" id="email" type="email" placeholder="name@example.com">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input class="input" id="password" type="password" placeholder="Your password">
+      </div>
+      <div class="row" style="margin-bottom:22px">
+        <label class="check"><input type="checkbox"> Remember me</label>
+        <a class="push" href="#">Forgot password?</a>
+      </div>
+      <button class="btn btn-primary btn-block btn-lg" type="submit">Log in</button>
+    </form>
+
+    <p class="center" style="margin:22px 0 0">New here? <a href="register.html">Create an account</a></p>
+    <p class="center muted" style="margin:10px 0 0;font-size:.9rem">Trainers and admins log in with the account the gym created for them.</p>
+  </div>
+</main>
+
+<script>
+  // Prototype only (no server yet):
+  //  - empty password or the word "wrong" shows the error message
+  //  - an email containing "admin" opens the admin pages
+  //  - any other email opens the member pages
+  document.getElementById('login-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = document.getElementById('email').value.trim().toLowerCase();
+    var pw = document.getElementById('password').value;
+    var error = document.getElementById('login-error');
+    if (email === '' || pw === '' || pw === 'wrong') { error.classList.remove('hidden'); return; }
+    window.location.href = email.indexOf('admin') !== -1 ? 'admin/members.html' : 'member/profile.html';
+  });
+</script>
+
+</body>
+</html>
