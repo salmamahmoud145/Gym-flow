@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create your account - GymFlow</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <a href="index.html#plans">Plans</a>
+      <a href="login.html">Log in</a>
+    </nav>
+  </div>
+</header>
+
+<main class="auth">
+  <div class="auth-card auth-card-wide">
+    <h1>Create your account</h1>
+    <p class="muted">Join GymFlow to book classes and manage your membership.</p>
+
+    <form id="register-form" novalidate>
+      <div class="form-grid">
+
+        <div class="field" id="f-name">
+          <label for="name">Full name <span class="req">*</span></label>
+          <input class="input" id="name" type="text" placeholder="Sara Ahmed">
+          <span class="field-error hidden">Enter your full name.</span>
+        </div>
+
+        <div class="field" id="f-email">
+          <label for="email">Email <span class="req">*</span></label>
+          <input class="input" id="email" type="email" placeholder="name@example.com">
+          <span class="field-error hidden">Enter a valid email address.</span>
+        </div>
+
+        <div class="field" id="f-phone">
+          <label for="phone">Phone <span class="req">*</span></label>
+          <input class="input" id="phone" type="tel" placeholder="01xxxxxxxxx">
+          <span class="field-error hidden">Enter your phone number.</span>
+        </div>
+
+        <div class="field" id="f-dob">
+          <label for="dob">Date of birth <span class="req">*</span></label>
+          <input class="input" id="dob" type="date">
+          <span class="field-error hidden">Choose your date of birth.</span>
+        </div>
+
+        <div class="field">
+          <label for="gender">Gender</label>
+          <select class="select" id="gender">
+            <option>Prefer not to say</option>
+            <option>Female</option>
+            <option>Male</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="emergency">Emergency contact</label>
+          <input class="input" id="emergency" type="text" placeholder="Name and phone number">
+        </div>
+
+        <div class="field" id="f-password">
+          <label for="password">Password <span class="req">*</span></label>
+          <input class="input" id="password" type="password" placeholder="At least 8 characters">
+          <span class="field-hint">Use letters and numbers.</span>
+          <span class="field-error hidden">Use at least 8 characters, with letters and numbers.</span>
+        </div>
+
+        <div class="field" id="f-confirm">
+          <label for="confirm">Confirm password <span class="req">*</span></label>
+          <input class="input" id="confirm" type="password" placeholder="Type it again">
+          <span class="field-error hidden">The passwords do not match.</span>
+        </div>
+
+        <div class="field span-2" id="f-terms">
+          <label class="check"><input type="checkbox" id="terms"> I agree to the gym terms and conditions</label>
+          <span class="field-error hidden">Accept the terms to create your account.</span>
+        </div>
+
+        <div class="span-2">
+          <button class="btn btn-primary btn-block btn-lg" type="submit">Create account</button>
+        </div>
+      </div>
+    </form>
+
+    <p class="center" style="margin:22px 0 0">Already a member? <a href="login.html">Log in</a></p>
+  </div>
+</main>
+
+<script>
+  // Prototype only: checks the form in the browser and moves to the login page.
+  var form = document.getElementById('register-form');
+  function setError(id, bad) {
+    var f = document.getElementById(id);
+    f.classList.toggle('has-error', bad);
+    f.querySelector('.field-error').classList.toggle('hidden', !bad);
+    return bad;
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = function (id) { return document.getElementById(id).value.trim(); };
+    var pw = document.getElementById('password').value;
+    var problems = [
+      setError('f-name', v('name') === ''),
+      setError('f-email', !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('email'))),
+      setError('f-phone', v('phone') === ''),
+      setError('f-dob', v('dob') === ''),
+      setError('f-password', !(pw.length >= 8 && /[A-Za-z]/.test(pw) && /\d/.test(pw))),
+      setError('f-confirm', pw !== document.getElementById('confirm').value),
+      setError('f-terms', !document.getElementById('terms').checked)
+    ];
+    if (problems.indexOf(true) === -1) { window.location.href = 'login.html'; }
+  });
+</script>
+
+</body>
+</html>
