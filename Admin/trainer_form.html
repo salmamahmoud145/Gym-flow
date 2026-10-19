@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Add / Edit trainer</title>
+    <link rel="stylesheet" href="../assets/style.css" />
+  </head>
+  <body>
+    <h1>Add / Edit trainer</h1>
+
+    <form method="post">
+      <input type="hidden" name="csrf" value="" />
+
+      <label
+        >Account
+        <select name="user_id" required>
+          <option value="">-- choose --</option>
+          <option value="1">Jane Doe (jane@example.com)</option>
+          <option value="2">John Smith (john@example.com)</option>
+        </select>
+      </label>
+
+      <label
+        >Speciality
+        <input name="speciality" required maxlength="100" />
+      </label>
+
+      <label
+        >Bio
+        <textarea name="bio" rows="4"></textarea>
+      </label>
+
+      <label
+        >Status
+        <select name="status">
+          <option value="active" selected>Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </label>
+
+      <button type="submit">Save</button>
+      <a href="trainers.html">Cancel</a>
+    </form>
+  </body>
+</html>

@@ -442,6 +442,84 @@ p  { margin: 0 0 1em; }
 .table-actions .danger { color: var(--stop); }
 .table-actions .danger:hover { color: #fff; background: var(--stop); }
 
+.rooms-table-wrap {
+  background: var(--paper);
+  border: var(--line);
+  box-shadow: var(--hard-sm);
+  overflow-x: auto;
+}
+
+.rooms-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 620px;
+}
+
+.rooms-table th,
+.rooms-table td {
+  text-align: left;
+  padding: 16px 18px;
+  border-bottom: 2px solid var(--concrete);
+  vertical-align: middle;
+}
+
+.rooms-table thead th {
+  background: var(--paper);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.rooms-table tbody tr:nth-child(even) {
+  background: var(--chalk);
+}
+
+.rooms-table tbody tr:hover {
+  background: var(--info-bg);
+}
+
+.rooms-table td:last-child,
+.rooms-table th:last-child {
+  width: 200px;
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.table-actions form {
+  display: inline;
+  margin: 0;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border: 2px solid var(--ink);
+  font-weight: 700;
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+  background: var(--info-bg);
+  color: var(--ink);
+}
+
+.status-active {
+  background: var(--go-bg);
+  color: var(--go);
+  border-color: var(--go);
+}
+
+.status-inactive {
+  background: var(--warn-bg);
+  color: var(--warn);
+  border-color: var(--warn);
+}
+
 .badge {
   display: inline-block;
   padding: 3px 11px;
