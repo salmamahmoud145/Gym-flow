@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Record a reception (cash) payment for a GymFlow member.">
+  <title>Record Payment – GymFlow Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <span class="user">Admin</span>
+      <a href="../login.html" class="btn btn-sm">Log out</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <nav class="sidebar">
+    <p class="sidebar-title">Admin</p>
+    <a href="members.html">Members</a>
+    <a href="plans.html">Plans</a>
+    <a href="payments.html" class="is-active">Payments</a>
+    <a href="freeze_requests.html">Freeze Requests</a>
+    <a href="classes.html">Classes</a>
+    <a href="bookings.html">Bookings</a>
+  </nav>
+
+  <main class="main">
+    <div class="page-head">
+      <h1 class="page-title">Record Payment</h1>
+      <p class="page-sub">Record a cash or in-person payment made at the gym reception.</p>
+    </div>
+
+    <!-- Success state -->
+    <div class="hidden" id="success-block">
+      <div class="alert alert-ok" style="margin-bottom:20px; font-size:1.05rem;">
+        ✅ Payment recorded successfully. Subscription activated.
+      </div>
+      <div class="panel" style="max-width:540px;">
+        <h2 class="panel-title" style="font-size:1.7rem;">Payment summary</h2>
+        <dl class="kv" id="success-kv"></dl>
+        <div class="form-actions" style="margin-top:22px;">
+          <a class="btn btn-primary" href="payments.html">Back to payments</a>
+          <button class="btn btn-ghost" onclick="resetForm()" type="button">Record another</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div id="form-block">
+      <div class="split">
+
+        <!-- Left: form -->
+        <div class="panel">
+          <h2 class="panel-title" style="font-size:1.6rem;">Payment details</h2>
+
+          <div class="field">
+            <label for="f-member">Member <span class="req">*</span></label>
+            <select class="select" id="f-member" name="member">
+              <option value="">— Select member —</option>
+              <option value="1" data-email="sara@example.com">Sara Mohamed</option>
+              <option value="2" data-email="omar@example.com">Omar Hassan</option>
+              <option value="3" data-email="nour@example.com">Nour Ahmed</option>
+              <option value="4" data-email="karim@example.com">Karim Bassem</option>
+              <option value="5" data-email="laila@example.com">Laila Fathy</option>
+            </select>
+            <span class="field-hint" id="member-email-hint"></span>
+          </div>
+
+          <div class="field">
+            <label for="f-plan">Plan <span class="req">*</span></label>
+            <select class="select" id="f-plan" name="plan">
+              <option value="">— Select plan —</option>
+              <option value="1" data-price="400" data-credits="8">Basic — EGP 400 / month (8 credits)</option>
+              <option value="2" data-price="650" data-credits="16">Standard — EGP 650 / month (16 credits)</option>
+              <option value="3" data-price="900" data-credits="0">Premium — EGP 900 / month (Unlimited)</option>
+            </select>
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="f-start">Start date <span class="req">*</span></label>
+              <input class="input" type="date" id="f-start" name="start_date">
+            </div>
+            <div class="field">
+              <label for="f-end">End date</label>
+              <input class="input" type="text" id="f-end" name="end_date" readonly placeholder="Auto-computed" style="background:var(--chalk);">
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="f-amount">Amount (EGP) <span class="req">*</span></label>
+              <input class="input" type="number" id="f-amount" name="amount" min="0" step="0.01" placeholder="0.00">
+              <span class="field-hint">Pre-filled from plan price; override if discounted.</span>
+            </div>
+            <div class="field">
+              <label for="f-method">Method <span class="req">*</span></label>
+              <select class="select" id="f-method" name="method">
+                <option value="reception" selected>Cash / Reception</option>
+                <option value="online">Online (manual override)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f-receipt">Receipt number <span class="req">*</span></label>
+            <div class="row" style="gap:10px;">
+              <input class="input grow" type="text" id="f-receipt" name="receipt_no" placeholder="REC-YYYYMMDD-XXXXXXXX">
+              <button class="btn btn-sm" type="button" id="gen-receipt-btn">Auto-generate</button>
+            </div>
+            <span class="field-hint">Must be unique across all payments.</span>
+          </div>
+
+          <div class="field">
+            <label for="f-note">Note (optional)</label>
+            <textarea class="textarea" id="f-note" name="note" placeholder="e.g. Paid in cash, 500 EGP + 150 EGP change given…" style="min-height:80px;"></textarea>
+          </div>
+
+          <div class="alert alert-bad hidden" id="form-err"></div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary btn-lg" type="button" id="record-btn">Record payment</button>
+            <a class="btn btn-ghost" href="payments.html">Cancel</a>
+          </div>
+        </div>
+
+        <!-- Right: order summary -->
+        <div>
+          <div class="panel" id="summary-panel">
+            <h2 class="panel-title" style="font-size:1.5rem;">Summary</h2>
+            <dl class="kv" id="summary-kv">
+              <dt>Member</dt><dd id="s-member">—</dd>
+              <dt>Plan</dt><dd id="s-plan">—</dd>
+              <dt>Start date</dt><dd id="s-start">—</dd>
+              <dt>End date</dt><dd id="s-end">—</dd>
+              <dt>Credits</dt><dd id="s-credits">—</dd>
+              <dt>Amount</dt><dd id="s-amount" style="color:var(--cobalt); font-size:1.4rem;">—</dd>
+              <dt>Method</dt><dd id="s-method">—</dd>
+            </dl>
+          </div>
+          <div class="alert" style="margin-top:16px; font-size:.9rem;">
+            <strong>Reception payments</strong> activate the subscription immediately. The member can start booking classes right away.
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /form-block -->
+
+  </main>
+</div>
+
+<footer class="site-footer">GymFlow — University Software Engineering project, Phase 1 prototype.</footer>
+
+<script>
+// ── Default today ───────────────────────────────────────────────────────
+var today = new Date().toISOString().slice(0,10);
+document.getElementById('f-start').value = today;
+document.getElementById('f-start').min   = today;
+
+function addMonths(str, n) {
+  var d = new Date(str);
+  d.setMonth(d.getMonth() + n);
+  return d.toISOString().slice(0,10);
+}
+
+var memberSel  = document.getElementById('f-member');
+var planSel    = document.getElementById('f-plan');
+var startInput = document.getElementById('f-start');
+var amountInput= document.getElementById('f-amount');
+var endInput   = document.getElementById('f-end');
+
+function updateSummary() {
+  var mOpt = memberSel.options[memberSel.selectedIndex];
+  var pOpt = planSel.options[planSel.selectedIndex];
+  var mName = memberSel.value ? mOpt.textContent : '—';
+  var pName = planSel.value  ? pOpt.textContent.split(' — ')[0] : '—';
+  var price = planSel.value  ? parseFloat(pOpt.dataset.price) : 0;
+  var cred  = planSel.value  ? (pOpt.dataset.credits==='0' ? 'Unlimited' : pOpt.dataset.credits) : '—';
+  var start = startInput.value || '—';
+  var end   = endInput.value   || '—';
+  var amt   = amountInput.value ? 'EGP ' + parseFloat(amountInput.value).toFixed(2) : '—';
+
+  document.getElementById('s-member').textContent  = mName;
+  document.getElementById('s-plan').textContent    = pName;
+  document.getElementById('s-start').textContent   = start;
+  document.getElementById('s-end').textContent     = end;
+  document.getElementById('s-credits').textContent = cred;
+  document.getElementById('s-amount').textContent  = amt;
+  document.getElementById('s-method').textContent  = document.getElementById('f-method').value === 'online' ? 'Online' : 'Cash / Reception';
+}
+
+memberSel.addEventListener('change', function() {
+  var opt = this.options[this.selectedIndex];
+  document.getElementById('member-email-hint').textContent = opt.dataset.email || '';
+  updateSummary();
+});
+planSel.addEventListener('change', function() {
+  var opt = this.options[this.selectedIndex];
+  if (opt.dataset.price) amountInput.value = opt.dataset.price;
+  if (startInput.value)  endInput.value = addMonths(startInput.value, 1);
+  updateSummary();
+});
+startInput.addEventListener('change', function() {
+  if (planSel.value) endInput.value = addMonths(this.value, 1);
+  updateSummary();
+});
+amountInput.addEventListener('input', updateSummary);
+document.getElementById('f-method').addEventListener('change', updateSummary);
+
+// ── Auto-generate receipt no ────────────────────────────────────────────
+document.getElementById('gen-receipt-btn').addEventListener('click', function() {
+  var rnd = Math.random().toString(16).slice(2,10).toUpperCase().slice(0,8);
+  document.getElementById('f-receipt').value =
+    'REC-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + rnd;
+});
+
+// ── Record button ───────────────────────────────────────────────────────
+document.getElementById('record-btn').addEventListener('click', function() {
+  var err = document.getElementById('form-err');
+  var missing = [];
+  if (!memberSel.value)         missing.push('Member');
+  if (!planSel.value)           missing.push('Plan');
+  if (!startInput.value)        missing.push('Start date');
+  if (!amountInput.value)       missing.push('Amount');
+  if (!document.getElementById('f-receipt').value.trim()) missing.push('Receipt number');
+
+  if (missing.length) {
+    err.classList.remove('hidden');
+    err.textContent = 'Please fill in: ' + missing.join(', ') + '.';
+    return;
+  }
+  err.classList.add('hidden');
+
+  // Show success
+  var pOpt = planSel.options[planSel.selectedIndex];
+  var cred = pOpt.dataset.credits === '0' ? 'Unlimited' : pOpt.dataset.credits;
+
+  document.getElementById('success-kv').innerHTML =
+    '<dt>Member</dt><dd>' + memberSel.options[memberSel.selectedIndex].textContent + '</dd>' +
+    '<dt>Plan</dt><dd>' + pOpt.textContent.split(' — ')[0] + '</dd>' +
+    '<dt>Amount</dt><dd>EGP ' + parseFloat(amountInput.value).toFixed(2) + '</dd>' +
+    '<dt>Start date</dt><dd>' + startInput.value + '</dd>' +
+    '<dt>End date</dt><dd>' + (endInput.value||'—') + '</dd>' +
+    '<dt>Credits</dt><dd>' + cred + '</dd>' +
+    '<dt>Method</dt><dd>Cash / Reception</dd>' +
+    '<dt>Receipt</dt><dd>' + document.getElementById('f-receipt').value + '</dd>' +
+    '<dt>Status</dt><dd><span class="badge badge-ok">Paid</span></dd>';
+
+  document.getElementById('form-block').classList.add('hidden');
+  document.getElementById('success-block').classList.remove('hidden');
+  window.scrollTo({ top:0, behavior:'smooth' });
+});
+
+function resetForm() {
+  document.getElementById('form-block').classList.remove('hidden');
+  document.getElementById('success-block').classList.add('hidden');
+  document.getElementById('plan-form') && document.getElementById('plan-form').reset();
+}
+</script>
+</body>
+</html>
