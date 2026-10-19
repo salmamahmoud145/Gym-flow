@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="View and manage all GymFlow member payments.">
+  <title>Payments – GymFlow Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    @media print {
+      .no-print, .sidebar, header, footer, .toolbar, .page-head, .grid { display:none !important; }
+      .app { display: block; }
+      .main { padding: 0; }
+      .table th { background: #333 !important; color: #fff !important; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header no-print">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <span class="user">Admin</span>
+      <a href="../login.html" class="btn btn-sm">Log out</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <nav class="sidebar no-print">
+    <p class="sidebar-title">Admin</p>
+    <a href="members.html">Members</a>
+    <a href="plans.html">Plans</a>
+    <a href="payments.html" class="is-active">Payments</a>
+    <a href="freeze_requests.html">Freeze Requests</a>
+    <a href="classes.html">Classes</a>
+    <a href="bookings.html">Bookings</a>
+  </nav>
+
+  <main class="main">
+    <div class="page-head row">
+      <div>
+        <h1 class="page-title">Payments</h1>
+        <p class="page-sub">Full ledger of all subscription payments. Filter, search, and print.</p>
+      </div>
+      <div class="row push no-print">
+        <a class="btn btn-accent" href="payment_form.html">+ Record payment</a>
+        <button class="btn" onclick="window.print()" type="button">🖨 Print</button>
+      </div>
+    </div>
+
+    <!-- Summary tiles -->
+    <div class="grid cols-4" style="margin-bottom:28px;" id="summary-tiles">
+      <div class="tile tile-cobalt">
+        <span class="tile-label">Total collected</span>
+        <span class="tile-value" style="font-size:2rem;" id="tile-total">EGP 0</span>
+        <span class="tile-note">all time</span>
+      </div>
+      <div class="tile tile-tape">
+        <span class="tile-label">Online payments</span>
+        <span class="tile-value" id="tile-online">0</span>
+        <span class="tile-note">transactions</span>
+      </div>
+      <div class="tile">
+        <span class="tile-label">Reception payments</span>
+        <span class="tile-value" id="tile-reception">0</span>
+        <span class="tile-note">transactions</span>
+      </div>
+      <div class="tile tile-ink">
+        <span class="tile-label">This month</span>
+        <span class="tile-value" style="font-size:2rem;" id="tile-month">EGP 0</span>
+        <span class="tile-note" id="tile-month-label"></span>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="toolbar no-print">
+      <div class="field">
+        <label for="filter-method">Method</label>
+        <select class="select" id="filter-method">
+          <option value="">All methods</option>
+          <option value="online">Online</option>
+          <option value="reception">Reception</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="filter-status">Status</label>
+        <select class="select" id="filter-status">
+          <option value="">All statuses</option>
+          <option value="paid">Paid</option>
+          <option value="pending">Pending</option>
+          <option value="refunded">Refunded</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="filter-search">Member / Receipt</label>
+        <input class="input" type="search" id="filter-search" placeholder="Search…">
+      </div>
+      <button class="btn" id="reset-btn" type="button">Reset</button>
+    </div>
+
+    <!-- Payments table -->
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Receipt no.</th>
+            <th>Member</th>
+            <th>Plan</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th class="no-print">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="payments-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Pager -->
+    <div class="row no-print" style="margin-top:18px; justify-content:space-between; align-items:center;">
+      <span class="muted" id="pager-info">Showing all results</span>
+      <div class="pager">
+        <a href="#" class="is-active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer class="site-footer no-print">GymFlow — University Software Engineering project, Phase 1 prototype.</footer>
+
+<script>
+// ── Prototype payments data ─────────────────────────────────────────────
+var PAYMENTS = [
+  { id:1, receipt:'REC-20261001-A1B2C3D4', member:'Sara M.',   plan:'Standard', amount:650,  method:'online',    status:'paid',    date:'2026-10-01' },
+  { id:2, receipt:'REC-20261003-E5F6G7H8', member:'Omar H.',   plan:'Premium',  amount:900,  method:'online',    status:'paid',    date:'2026-10-03' },
+  { id:3, receipt:'REC-20261005-I9J0K1L2', member:'Nour A.',   plan:'Basic',    amount:400,  method:'reception', status:'paid',    date:'2026-10-05' },
+  { id:4, receipt:'REC-20261008-M3N4O5P6', member:'Karim B.',  plan:'Standard', amount:650,  method:'online',    status:'paid',    date:'2026-10-08' },
+  { id:5, receipt:'REC-20261010-Q7R8S9T0', member:'Laila F.',  plan:'Premium',  amount:900,  method:'reception', status:'pending', date:'2026-10-10' },
+  { id:6, receipt:'REC-20261012-U1V2W3X4', member:'Mina Y.',   plan:'Basic',    amount:400,  method:'online',    status:'paid',    date:'2026-10-12' },
+  { id:7, receipt:'REC-20261015-Y5Z6A7B8', member:'Dina S.',   plan:'Standard', amount:650,  method:'reception', status:'paid',    date:'2026-10-15' },
+  { id:8, receipt:'REC-20261016-C9D0E1F2', member:'Youssef R.', plan:'Basic',   amount:400,  method:'online',    status:'refunded',date:'2026-10-16' },
+  { id:9, receipt:'REC-20261017-G3H4I5J6', member:'Rania M.',  plan:'Premium',  amount:900,  method:'online',    status:'paid',    date:'2026-10-17' },
+  { id:10,receipt:'REC-20261018-K7L8M9N0', member:'Fady T.',   plan:'Standard', amount:650,  method:'reception', status:'pending', date:'2026-10-18' },
+];
+
+function statusBadge(s) {
+  var map = { paid:'badge-ok', pending:'badge-warn', refunded:'badge-info' };
+  return '<span class="badge ' + (map[s]||'badge-off') + '">' + s + '</span>';
+}
+function methodLabel(m) {
+  return m === 'online' ? '💳 Online' : '🏢 Reception';
+}
+
+function renderPayments(list) {
+  var tbody = document.getElementById('payments-tbody');
+  tbody.innerHTML = '';
+  if (list.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" class="center muted" style="padding:32px;">No payments match the filter.</td></tr>';
+    return;
+  }
+  list.forEach(function(p) {
+    tbody.innerHTML +=
+      '<tr>' +
+      '<td style="font-size:.88rem; font-weight:700;">' + p.receipt + '</td>' +
+      '<td>' + p.member + '</td>' +
+      '<td>' + p.plan + '</td>' +
+      '<td><strong>EGP ' + p.amount.toFixed(2) + '</strong></td>' +
+      '<td>' + methodLabel(p.method) + '</td>' +
+      '<td>' + statusBadge(p.status) + '</td>' +
+      '<td>' + p.date + '</td>' +
+      '<td class="table-actions no-print">' +
+        '<a href="../member/receipt.html" target="_blank">Receipt</a>' +
+        (p.status === 'pending' ? '<a href="#">Mark paid</a>' : '') +
+      '</td>' +
+      '</tr>';
+  });
+}
+
+function updateTiles(list) {
+  var total    = list.reduce(function(s,p){ return s + (p.status!=='refunded'?p.amount:0); }, 0);
+  var online   = list.filter(function(p){ return p.method==='online'; }).length;
+  var recep    = list.filter(function(p){ return p.method==='reception'; }).length;
+  var thisMonth = list.filter(function(p){ return p.date.startsWith('2026-10'); })
+                      .reduce(function(s,p){ return s + (p.status!=='refunded'?p.amount:0); }, 0);
+  document.getElementById('tile-total').textContent    = 'EGP ' + total.toLocaleString('en');
+  document.getElementById('tile-online').textContent   = online;
+  document.getElementById('tile-reception').textContent= recep;
+  document.getElementById('tile-month').textContent    = 'EGP ' + thisMonth.toLocaleString('en');
+  document.getElementById('tile-month-label').textContent = 'Oct 2026';
+  document.getElementById('pager-info').textContent    = 'Showing ' + list.length + ' of ' + PAYMENTS.length + ' payments';
+}
+
+function applyFilters() {
+  var method  = document.getElementById('filter-method').value;
+  var status  = document.getElementById('filter-status').value;
+  var search  = document.getElementById('filter-search').value.toLowerCase();
+  var result  = PAYMENTS.filter(function(p) {
+    if (method && p.method  !== method)  return false;
+    if (status && p.status  !== status)  return false;
+    if (search && !p.member.toLowerCase().includes(search) &&
+                  !p.receipt.toLowerCase().includes(search) &&
+                  !p.plan.toLowerCase().includes(search)) return false;
+    return true;
+  });
+  renderPayments(result);
+  updateTiles(result);
+}
+
+['filter-method','filter-status','filter-search'].forEach(function(id) {
+  document.getElementById(id).addEventListener('input', applyFilters);
+  document.getElementById(id).addEventListener('change', applyFilters);
+});
+document.getElementById('reset-btn').addEventListener('click', function() {
+  document.getElementById('filter-method').value  = '';
+  document.getElementById('filter-status').value  = '';
+  document.getElementById('filter-search').value  = '';
+  applyFilters();
+});
+
+applyFilters();  // initial render
+</script>
+</body>
+</html>
