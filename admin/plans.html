@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Manage GymFlow membership plans — admin panel.">
+  <title>Plans – GymFlow Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    /* Modal */
+    .modal-backdrop { display: none; }
+    .modal-backdrop.open { display: grid; }
+    /* Toggle pill */
+    .toggle-wrap { display:flex; align-items:center; gap:8px; }
+    .toggle {
+      position:relative; width:44px; height:24px;
+      background:var(--concrete); border: var(--line);
+      cursor:pointer; flex:none;
+    }
+    .toggle::after {
+      content:''; position:absolute;
+      top:2px; left:2px;
+      width:16px; height:16px;
+      background:var(--ink);
+      transition: left .15s;
+    }
+    .toggle.on { background:var(--go); }
+    .toggle.on::after { left:22px; background:#fff; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <span class="user">Admin</span>
+      <a href="../login.html" class="btn btn-sm">Log out</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <!-- ── Admin sidebar ── -->
+  <nav class="sidebar">
+    <p class="sidebar-title">Admin</p>
+    <a href="members.html">Members</a>
+    <a href="plans.html" class="is-active">Plans</a>
+    <a href="payments.html">Payments</a>
+    <a href="freeze_requests.html">Freeze Requests</a>
+    <a href="classes.html">Classes</a>
+    <a href="bookings.html">Bookings</a>
+  </nav>
+
+  <main class="main">
+    <div class="page-head row">
+      <div>
+        <h1 class="page-title">Membership Plans</h1>
+        <p class="page-sub">Manage plans available to members. Deactivated plans stay for existing subscribers.</p>
+      </div>
+      <a class="btn btn-accent push" href="plan_form.html?mode=add" id="add-plan-btn">+ Add plan</a>
+    </div>
+
+    <!-- Summary tiles -->
+    <div class="grid cols-4" style="margin-bottom:30px;">
+      <div class="tile tile-cobalt">
+        <span class="tile-label">Total plans</span>
+        <span class="tile-value">3</span>
+        <span class="tile-note">all time</span>
+      </div>
+      <div class="tile tile-tape">
+        <span class="tile-label">Active plans</span>
+        <span class="tile-value" id="tile-active-count">3</span>
+        <span class="tile-note">visible to members</span>
+      </div>
+      <div class="tile">
+        <span class="tile-label">Subscriptions</span>
+        <span class="tile-value">47</span>
+        <span class="tile-note">total active</span>
+      </div>
+      <div class="tile tile-ink">
+        <span class="tile-label">Monthly revenue</span>
+        <span class="tile-value" style="font-size:2rem;">EGP<br>28,150</span>
+        <span class="tile-note">this month</span>
+      </div>
+    </div>
+
+    <!-- Plans table -->
+    <div class="table-wrap">
+      <table class="table" id="plans-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Duration</th>
+            <th>Price</th>
+            <th>Credits</th>
+            <th>Subscribers</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="plans-tbody">
+          <!-- Rows injected by JS -->
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── Delete confirmation modal ── -->
+<div class="modal-backdrop" id="delete-modal" role="dialog" aria-modal="true" aria-labelledby="del-title">
+  <div class="modal">
+    <h2 id="del-title" style="margin-bottom:8px;">Delete plan?</h2>
+    <p class="muted" id="del-plan-name" style="margin-bottom:16px;"></p>
+    <div class="alert alert-bad">
+      This is permanent and cannot be undone. Plans with existing subscribers <strong>cannot</strong> be deleted.
+    </div>
+    <div class="form-actions" style="margin-top:18px;">
+      <button class="btn btn-danger" id="confirm-delete-btn" type="button">Yes, delete</button>
+      <button class="btn btn-ghost" onclick="closeDeleteModal()" type="button">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">GymFlow — University Software Engineering project, Phase 1 prototype.</footer>
+
+<script>
+// ── Prototype data ────────────────────────────────────────────────────
+var plans = [
+  { id:1, name:'Basic',    months:1, price:400, credits:'8',        subs:12, status:'active'   },
+  { id:2, name:'Standard', months:1, price:650, credits:'16',       subs:28, status:'active'   },
+  { id:3, name:'Premium',  months:1, price:900, credits:'Unlimited', subs:7, status:'active'   },
+];
+
+function renderPlans() {
+  var tbody = document.getElementById('plans-tbody');
+  tbody.innerHTML = '';
+  plans.forEach(function(p, i) {
+    var isActive = p.status === 'active';
+    var canDelete = p.subs === 0;
+    tbody.innerHTML +=
+      '<tr id="row-'+p.id+'">' +
+      '<td>' + (i+1) + '</td>' +
+      '<td><strong>' + p.name + '</strong></td>' +
+      '<td>' + p.months + ' month' + (p.months>1?'s':'') + '</td>' +
+      '<td>EGP ' + p.price.toFixed(2) + '</td>' +
+      '<td>' + p.credits + '</td>' +
+      '<td>' + p.subs + '</td>' +
+      '<td>' +
+        '<div class="toggle-wrap">' +
+        '<div class="toggle ' + (isActive?'on':'') + '" id="tog-'+p.id+'" ' +
+             'onclick="toggleStatus('+p.id+')" title="' + (isActive?'Deactivate':'Activate') + '"></div>' +
+        '<span class="badge ' + (isActive?'badge-ok':'badge-off') + '" id="badge-'+p.id+'">' +
+          (isActive?'Active':'Inactive') +
+        '</span></div>' +
+      '</td>' +
+      '<td class="table-actions">' +
+        '<a href="plan_form.html?mode=edit&id='+p.id+'">Edit</a>' +
+        (canDelete
+          ? '<a href="#" class="danger" onclick="openDeleteModal('+p.id+'); return false;">Delete</a>'
+          : '<span style="color:var(--muted); font-size:.85rem;">In use</span>') +
+      '</td>' +
+      '</tr>';
+  });
+  // Update active count tile
+  var activeCount = plans.filter(function(p){ return p.status==='active'; }).length;
+  document.getElementById('tile-active-count').textContent = activeCount;
+}
+renderPlans();
+
+function toggleStatus(id) {
+  var plan = plans.find(function(p){ return p.id===id; });
+  if (!plan) return;
+  plan.status = plan.status === 'active' ? 'inactive' : 'active';
+  renderPlans();
+}
+
+// ── Delete modal ────────────────────────────────────────────────────────
+var pendingDeleteId = null;
+function openDeleteModal(id) {
+  var plan = plans.find(function(p){ return p.id===id; });
+  if (!plan) return;
+  pendingDeleteId = id;
+  document.getElementById('del-plan-name').textContent = 'Plan: "' + plan.name + '"';
+  document.getElementById('delete-modal').classList.add('open');
+}
+function closeDeleteModal() {
+  pendingDeleteId = null;
+  document.getElementById('delete-modal').classList.remove('open');
+}
+document.getElementById('confirm-delete-btn').addEventListener('click', function() {
+  if (!pendingDeleteId) return;
+  plans = plans.filter(function(p){ return p.id !== pendingDeleteId; });
+  closeDeleteModal();
+  renderPlans();
+});
+// Close on backdrop click
+document.getElementById('delete-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeDeleteModal();
+});
+</script>
+</body>
+</html>
