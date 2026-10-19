@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Classes</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <h1>Classes</h1>
+
+    <p><a class="btn" href="class_form.html">Add class</a></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Class</th>
+          <th>Trainer</th>
+          <th>Room</th>
+          <th>Booked</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2026-10-20</td>
+          <td>09:00-10:00</td>
+          <td>Morning Yoga <small>(series)</small></td>
+          <td>Jane Doe</td>
+          <td>Studio A</td>
+          <td>10/20</td>
+          <td>Open</td>
+          <td>
+            <a href="class_form.html?id=1">Edit</a>
+            <form
+              method="post"
+              style="display: inline"
+              onsubmit="
+                return confirm(
+                  'Cancel this class? Bookings will be cancelled and credits returned.',
+                );
+              "
+            >
+              <input type="hidden" name="csrf" value="" />
+              <input type="hidden" name="class_id" value="1" />
+              <button name="cancel" value="1">Cancel</button>
+            </form>
+            <form
+              method="post"
+              style="display: inline"
+              onsubmit="return confirm('Delete this class permanently?');"
+            >
+              <input type="hidden" name="csrf" value="" />
+              <input type="hidden" name="class_id" value="1" />
+              <button name="delete" value="1">Delete</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
