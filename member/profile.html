@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profile and attendance - GymFlow</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <span class="user">Sara A.</span>
+      <a class="btn btn-accent btn-sm" href="../login.html">Log out</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <!-- Replace each "#" with your teammates' page once it exists -->
+  <aside class="sidebar">
+    <p class="sidebar-title">Member area</p>
+    <a href="#">Dashboard</a>
+    <a href="#">Membership plans</a>
+    <a href="#">Class schedule</a>
+    <a href="#">My bookings</a>
+    <a class="is-active" href="profile.html">Profile and attendance</a>
+  </aside>
+
+  <main class="main">
+    <div class="page-head">
+      <h1 class="page-title">Profile and attendance</h1>
+      <p class="page-sub">Keep your details up to date and review your visits.</p>
+    </div>
+
+    <div class="alert alert-ok hidden" id="saved">Your changes are saved.</div>
+
+    <div class="grid cols-2">
+
+      <div class="stack">
+        <section class="panel">
+          <h2 class="panel-title">My profile</h2>
+          <form onsubmit="event.preventDefault();document.getElementById('saved').classList.remove('hidden');window.scrollTo(0,0);">
+            <div class="field">
+              <label for="name">Full name</label>
+              <input class="input" id="name" value="Sara Ahmed">
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input class="input" id="email" type="email" value="sara@example.com">
+            </div>
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input class="input" id="phone" type="tel" value="01012345678">
+            </div>
+            <div class="field">
+              <label for="emergency">Emergency contact</label>
+              <input class="input" id="emergency" value="Hana - 01098765432">
+            </div>
+            <button class="btn btn-primary" type="submit">Save changes</button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <h2 class="panel-title">Change password</h2>
+          <form onsubmit="event.preventDefault();document.getElementById('saved').classList.remove('hidden');window.scrollTo(0,0);">
+            <div class="field">
+              <label for="old-pw">Current password</label>
+              <input class="input" id="old-pw" type="password">
+            </div>
+            <div class="field">
+              <label for="new-pw">New password</label>
+              <input class="input" id="new-pw" type="password" placeholder="At least 8 characters">
+              <span class="field-hint">Use letters and numbers.</span>
+            </div>
+            <div class="field">
+              <label for="new-pw2">Confirm new password</label>
+              <input class="input" id="new-pw2" type="password">
+            </div>
+            <button class="btn" type="submit">Update password</button>
+          </form>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="panel">
+          <h2 class="panel-title">This month</h2>
+          <dl class="kv">
+            <dt>Visits</dt><dd>11</dd>
+            <dt>Late cancellations</dt><dd>0</dd>
+            <dt>No-shows</dt><dd>1</dd>
+          </dl>
+        </section>
+
+        <section class="panel">
+          <h2 class="panel-title">Attendance history</h2>
+          <div class="field">
+            <label for="month">Month</label>
+            <select class="select" id="month">
+              <option>October 2026</option>
+              <option>September 2026</option>
+              <option>August 2026</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Date</th><th>Type</th><th>Class</th><th>Check-in</th></tr></thead>
+              <tbody>
+                <tr><td>24 Oct</td><td>Class</td><td>Yoga</td><td>17:55</td></tr>
+                <tr><td>22 Oct</td><td>Gym visit</td><td>-</td><td>19:10</td></tr>
+                <tr><td>20 Oct</td><td>Class</td><td>Spinning</td><td>18:50</td></tr>
+                <tr><td>18 Oct</td><td>Class</td><td>Pilates</td><td><span class="badge badge-bad">No-show</span></td></tr>
+                <tr><td>16 Oct</td><td>Gym visit</td><td>-</td><td>07:20</td></tr>
+                <tr><td>14 Oct</td><td>Class</td><td>HIIT</td><td>12:02</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
