@@ -1,11 +1,15 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700&display=swap');
+
+/* ---------- 1. Tokens ---------- */
 :root {
-  --ink: #0C0E3A;         
-  --cobalt: #2323FF;       
-  --tape: #FFD60A;         
-  --chalk: #F3F4FB;       
-  --paper: #FFFFFF;        
-  --concrete: #D3D7EE;     
-  --muted: #4F5480;        
+  --ink: #0C0E3A;          /* deep indigo ink: all text, outlines, shadows */
+  --cobalt: #2323FF;       /* hero blue: primary actions, header */
+  --tape: #FFD60A;         /* caution-tape yellow: highlights, active states */
+  --chalk: #F3F4FB;        /* page background */
+  --paper: #FFFFFF;        /* panels and inputs */
+  --concrete: #D3D7EE;     /* soft dividers */
+  --muted: #4F5480;        /* secondary text */
 
   --go: #0B7A4B;   --go-bg: #D6F5E6;
   --warn: #8F4300; --warn-bg: #FFE7B8;
@@ -75,7 +79,7 @@ p  { margin: 0 0 1em; }
   top: 0;
   z-index: 50;
 }
-.site-header::after {           
+.site-header::after {            /* the signature: caution tape under the header */
   content: "";
   display: block;
   height: 16px;
@@ -407,7 +411,7 @@ p  { margin: 0 0 1em; }
 }
 .modal h2 { font-size: 2.2rem; }
 
-.photo {                          
+.photo {                          /* image placeholder */
   display: grid;
   place-items: center;
   min-height: 260px;
@@ -520,7 +524,7 @@ p  { margin: 0 0 1em; }
   font-weight: 800;
 }
 
-
+/* pure-CSS bar chart:  <div class="bar" style="--h:62%"><b>62</b><span>Mon</span></div> */
 .bar-chart {
   display: flex;
   align-items: flex-end;
