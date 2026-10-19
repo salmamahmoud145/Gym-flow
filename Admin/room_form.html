@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Add / Edit room</title>
+    <link rel="stylesheet" href="../assets/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="page-head">
+        <h1 class="page-title">Add / Edit room</h1>
+      </header>
+
+      <section class="panel">
+        <form method="post">
+          <input type="hidden" name="csrf" value="" />
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="room-name">Name</label>
+              <input class="input" id="room-name" name="name" required maxlength="80" />
+            </div>
+
+            <div class="field">
+              <label for="room-capacity">Capacity</label>
+              <input class="input" id="room-capacity" type="number" name="capacity" min="1" value="20" required />
+            </div>
+
+            <div class="field span-2">
+              <label for="room-status">Status</label>
+              <select class="select" id="room-status" name="status">
+                <option value="active" selected>Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Save</button>
+            <a class="btn btn-ghost" href="rooms.html">Cancel</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

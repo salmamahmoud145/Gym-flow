@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Class timetable</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <h1>Class timetable</h1>
+
+  <form id="filters" onsubmit="return false">
+    <label>Date 
+      <input type="date" name="date">
+    </label>
+    <label>Type 
+      <select name="type">
+        <option value="">All</option>
+        <option>HIIT</option>
+        <option>Pilates</option>
+        <option>Spinning</option>
+        <option>Yoga</option>
+      </select>
+    </label>
+    <label>Trainer 
+      <select name="trainer">
+        <option value="">All</option>
+        <option value="1">Jane Doe</option>
+        <option value="2">John Smith</option>
+      </select>
+    </label>
+  </form>
+
+  <p><small id="last-updated"></small></p>
+
+  <table id="timetable" data-member="0" data-api="api/availability.html">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Class</th>
+        <th>Type</th>
+        <th>Trainer</th>
+        <th>Booked</th>
+        <th>Spots left</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2026-10-20</td>
+        <td>09:00-10:00</td>
+        <td><a href="member/class_details.html?id=1">Morning Yoga</a></td>
+        <td>Yoga</td>
+        <td>Jane Doe</td>
+        <td>10/20</td>
+        <td>10</td>
+        <td><span class="badge status-available">Available</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>2026-10-20</td>
+        <td>11:00-12:00</td>
+        <td><a href="member/class_details.html?id=2">HIIT Blast</a></td>
+        <td>HIIT</td>
+        <td>John Smith</td>
+        <td>14/15</td>
+        <td>1</td>
+        <td><span class="badge status-almost-full">Almost full</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>2026-10-20</td>
+        <td>17:00-18:00</td>
+        <td><a href="member/class_details.html?id=3">Spin Power</a></td>
+        <td>Spinning</td>
+        <td>Jane Doe</td>
+        <td>20/20</td>
+        <td>0</td>
+        <td><span class="badge status-full">Full</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><a class="btn" href="member/schedule.html">Log in to book a class</a></p>
+
+  <script src="assets/js/availability.js"></script>
+</body>
+</html>
+
