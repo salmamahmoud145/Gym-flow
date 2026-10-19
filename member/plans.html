@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Browse and subscribe to GymFlow membership plans.">
+  <title>Membership Plans – GymFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <span class="user">Sara M.</span>
+      <a href="../login.html" class="btn btn-sm">Log out</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <!-- ── Sidebar ── -->
+  <nav class="sidebar">
+    <p class="sidebar-title">Member</p>
+    <a href="profile.html">Dashboard</a>
+    <a href="plans.html" class="is-active">Plans</a>
+    <a href="bookings.html">My Bookings</a>
+    <a href="profile.html">My Profile</a>
+    <a href="freeze_request.html">Freeze Request</a>
+  </nav>
+
+  <!-- ── Main content ── -->
+  <main class="main">
+
+    <div class="page-head">
+      <h1 class="page-title">Membership Plans</h1>
+      <p class="page-sub">Pick the plan that fits your schedule. Renew or upgrade any time.</p>
+    </div>
+
+    <!-- Current subscription banner -->
+    <div class="alert" id="sub-banner">
+      <div>
+        <strong>Current plan: Standard</strong>
+        &nbsp;<span class="badge badge-ok">Active</span>
+        &nbsp;&nbsp;Expires: <strong>2026-11-18</strong>
+        &nbsp;|&nbsp; Credits left: <strong>10 / 16</strong>
+        &nbsp;&nbsp;
+        <a href="checkout.html?plan_id=2&amp;renew=1">Renew now →</a>
+      </div>
+    </div>
+
+    <!-- Plan cards -->
+    <div class="grid cols-3" style="margin-top:20px;" id="plan-grid">
+
+      <!-- Basic -->
+      <div class="plan">
+        <h2 class="plan-name">Basic</h2>
+        <div class="plan-price">EGP 400 <small>/ month</small></div>
+        <p>8 group classes per month. Access to gym floor and locker rooms.</p>
+        <ul style="margin:0 0 12px; padding-left:20px; color:var(--muted); font-size:.92rem;">
+          <li>8 class credits</li>
+          <li>Gym floor access</li>
+          <li>Locker room</li>
+        </ul>
+        <a class="btn" href="checkout.html?plan_id=1">Choose Basic</a>
+      </div>
+
+      <!-- Standard – current plan -->
+      <div class="plan is-selected">
+        <span class="plan-flag">Your plan</span>
+        <h2 class="plan-name">Standard</h2>
+        <div class="plan-price">EGP 650 <small>/ month</small></div>
+        <p>16 classes per month. Full facility access including pool and sauna.</p>
+        <ul style="margin:0 0 12px; padding-left:20px; font-size:.92rem;">
+          <li>16 class credits</li>
+          <li>All gym facilities</li>
+          <li>Pool &amp; sauna</li>
+        </ul>
+        <a class="btn" href="checkout.html?plan_id=2&amp;renew=1">Renew Standard</a>
+      </div>
+
+      <!-- Premium -->
+      <div class="plan">
+        <h2 class="plan-name">Premium</h2>
+        <div class="plan-price">EGP 900 <small>/ month</small></div>
+        <p>Unlimited classes every month. All facilities + personal trainer sessions.</p>
+        <ul style="margin:0 0 12px; padding-left:20px; color:var(--muted); font-size:.92rem;">
+          <li>Unlimited classes</li>
+          <li>All facilities</li>
+          <li>Personal trainer</li>
+        </ul>
+        <a class="btn btn-primary" href="checkout.html?plan_id=3">Upgrade to Premium</a>
+      </div>
+
+    </div><!-- /plan-grid -->
+
+    <!-- FAQ strip -->
+    <section style="margin-top:52px;">
+      <h2 class="section-title">Common questions</h2>
+      <div class="grid cols-2">
+        <div class="panel panel-flat">
+          <h3>When does my plan start?</h3>
+          <p class="muted">You choose your start date at checkout. The end date is automatically computed one calendar month later.</p>
+        </div>
+        <div class="panel panel-flat">
+          <h3>Can I freeze my membership?</h3>
+          <p class="muted">Yes — submit a freeze request and an admin will approve it within 24 hours. Your end date is extended by the frozen period.</p>
+        </div>
+        <div class="panel panel-flat">
+          <h3>What if I run out of credits early?</h3>
+          <p class="muted">Your subscription expires automatically. You can renew at any time to get a fresh set of credits and a new end date.</p>
+        </div>
+        <div class="panel panel-flat">
+          <h3>Can I pay at the gym?</h3>
+          <p class="muted">Yes. Choose "Pay at reception" at checkout. A staff member records your payment when you visit.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-footer">GymFlow — University Software Engineering project, Phase 1 prototype.</footer>
+
+</body>
+</html>
