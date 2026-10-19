@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Rooms</title>
+    <link rel="stylesheet" href="../assets/style.css" />
+  </head>
+  <body>
+    <h1>Rooms</h1>
+
+    <p><a class="btn" href="room_form.html">Add room</a></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Capacity</th>
+          <th>Status</th>
+          <th>Classes</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Studio A</td>
+          <td>20</td>
+          <td>active</td>
+          <td>5</td>
+          <td>
+            <a href="room_form.html?id=1">Edit</a>
+            <form
+              method="post"
+              style="display: inline"
+              onsubmit="return confirm('Delete this room?');"
+            >
+              <input type="hidden" name="csrf" value="" />
+              <input type="hidden" name="delete_id" value="1" />
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

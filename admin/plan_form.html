@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Add or edit a GymFlow membership plan.">
+  <title id="page-title-tag">Add Plan – GymFlow Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .plan-preview {
+      position: sticky;
+      top: 110px;
+    }
+    .preview-live {
+      transition: all .2s ease;
+    }
+    .credit-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .credit-row .field { flex:1; margin:0; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <span class="user">Admin</span>
+      <a href="../login.html" class="btn btn-sm">Log out</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <nav class="sidebar">
+    <p class="sidebar-title">Admin</p>
+    <a href="members.html">Members</a>
+    <a href="plans.html" class="is-active">Plans</a>
+    <a href="payments.html">Payments</a>
+    <a href="freeze_requests.html">Freeze Requests</a>
+    <a href="classes.html">Classes</a>
+    <a href="bookings.html">Bookings</a>
+  </nav>
+
+  <main class="main">
+    <div class="page-head">
+      <h1 class="page-title" id="page-heading">Add Plan</h1>
+      <p class="page-sub" id="page-sub">Fill in the details below. The live preview updates as you type.</p>
+    </div>
+
+    <div class="split">
+
+      <!-- ── Left: form ── -->
+      <div class="panel">
+        <form id="plan-form" novalidate>
+
+          <div class="form-grid">
+            <div class="field span-2">
+              <label for="f-name">Plan name <span class="req">*</span></label>
+              <input class="input" type="text" id="f-name" name="name" placeholder="e.g. Gold" maxlength="100">
+              <span class="field-hint">Shown to members on the plans page.</span>
+            </div>
+
+            <div class="field">
+              <label for="f-months">Duration (months) <span class="req">*</span></label>
+              <input class="input" type="number" id="f-months" name="duration_months" min="1" max="24" value="1">
+            </div>
+
+            <div class="field">
+              <label for="f-price">Price (EGP) <span class="req">*</span></label>
+              <input class="input" type="number" id="f-price" name="price" min="0" step="0.01" placeholder="0.00">
+            </div>
+          </div>
+
+          <!-- Credits -->
+          <div class="field" style="margin-top:6px;">
+            <label>Class credits <span class="req">*</span></label>
+            <div class="credit-row" style="margin-top:8px;">
+              <label class="check" for="unlimited-check">
+                <input type="checkbox" id="unlimited-check"> Unlimited classes
+              </label>
+            </div>
+            <div class="field" id="credits-field" style="margin:10px 0 0;">
+              <input class="input" type="number" id="f-credits" name="class_credits"
+                     min="1" max="999" placeholder="e.g. 8">
+              <span class="field-hint">Leave blank if unlimited is checked.</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f-desc">Description</label>
+            <textarea class="textarea" id="f-desc" name="description"
+                      placeholder="What's included in this plan…"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="f-status">Status <span class="req">*</span></label>
+            <select class="select" id="f-status" name="status">
+              <option value="active">Active – visible to members</option>
+              <option value="inactive">Inactive – hidden from members</option>
+            </select>
+          </div>
+
+          <!-- Form error message -->
+          <div class="alert alert-bad hidden" id="form-error">Please fill in all required fields.</div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary btn-lg" type="button" id="save-btn">Save plan</button>
+            <a class="btn btn-ghost" href="plans.html">Cancel</a>
+          </div>
+
+        </form>
+      </div><!-- /left -->
+
+      <!-- ── Right: live preview ── -->
+      <div class="plan-preview">
+        <div class="muted" style="font-size:.85rem; margin-bottom:10px; font-weight:600; text-transform:uppercase; letter-spacing:.05em;">Live preview</div>
+        <div class="plan preview-live" id="preview-card">
+          <h2 class="plan-name" id="prev-name">New Plan</h2>
+          <div class="plan-price" id="prev-price">EGP — <small>/ 1 month</small></div>
+          <p id="prev-desc" class="muted" style="font-size:.92rem;">Your description will appear here.</p>
+          <p style="font-size:.88rem; color:var(--muted);" id="prev-credits">? classes</p>
+          <span class="badge badge-ok" id="prev-status">Active</span>
+        </div>
+        <div style="margin-top:14px;">
+          <p class="muted" style="font-size:.85rem;">This is how the plan card will look on the member-facing plans page.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">GymFlow — University Software Engineering project, Phase 1 prototype.</footer>
+
+<script>
+// ── Mode detection (add vs edit) ───────────────────────────────────────
+var params = new URLSearchParams(window.location.search);
+var mode   = params.get('mode') || 'add';
+var editId = parseInt(params.get('id') || '0');
+
+// Prototype plan data for edit mode
+var PLANS_DATA = {
+  1: { name:'Basic',    months:1, price:400, credits:'8',    desc:'8 group classes per month.', status:'active' },
+  2: { name:'Standard', months:1, price:650, credits:'16',   desc:'16 classes per month. Full facility access.', status:'active' },
+  3: { name:'Premium',  months:1, price:900, credits:null,   desc:'Unlimited classes every month.', status:'active' },
+};
+
+if (mode === 'edit' && PLANS_DATA[editId]) {
+  document.getElementById('page-title-tag').textContent = 'Edit Plan – GymFlow Admin';
+  document.getElementById('page-heading').textContent   = 'Edit Plan';
+  document.getElementById('page-sub').textContent       = 'Update this plan. Changes are reflected immediately.';
+  document.getElementById('save-btn').textContent       = 'Update plan';
+
+  var d = PLANS_DATA[editId];
+  document.getElementById('f-name').value    = d.name;
+  document.getElementById('f-months').value  = d.months;
+  document.getElementById('f-price').value   = d.price;
+  document.getElementById('f-status').value  = d.status;
+  document.getElementById('f-desc').value    = d.desc;
+  if (!d.credits) {
+    document.getElementById('unlimited-check').checked = true;
+    document.getElementById('credits-field').classList.add('hidden');
+  } else {
+    document.getElementById('f-credits').value = d.credits;
+  }
+}
+
+// ── Live preview logic ─────────────────────────────────────────────────
+function updatePreview() {
+  var name     = document.getElementById('f-name').value.trim()       || 'New Plan';
+  var months   = parseInt(document.getElementById('f-months').value)  || 1;
+  var price    = parseFloat(document.getElementById('f-price').value);
+  var credits  = document.getElementById('unlimited-check').checked
+                   ? 'Unlimited classes'
+                   : (document.getElementById('f-credits').value + ' classes' || '? classes');
+  var desc     = document.getElementById('f-desc').value.trim()       || 'Your description will appear here.';
+  var status   = document.getElementById('f-status').value;
+
+  document.getElementById('prev-name').textContent    = name;
+  document.getElementById('prev-price').innerHTML     =
+    (isNaN(price) ? 'EGP —' : 'EGP ' + price.toFixed(2)) +
+    ' <small>/ ' + months + ' month' + (months>1?'s':'') + '</small>';
+  document.getElementById('prev-desc').textContent    = desc;
+  document.getElementById('prev-credits').textContent = credits;
+
+  var statusBadge = document.getElementById('prev-status');
+  statusBadge.textContent = status === 'active' ? 'Active' : 'Inactive';
+  statusBadge.className   = 'badge ' + (status === 'active' ? 'badge-ok' : 'badge-off');
+}
+
+['f-name','f-months','f-price','f-credits','f-desc','f-status'].forEach(function(id) {
+  document.getElementById(id).addEventListener('input', updatePreview);
+});
+document.getElementById('f-status').addEventListener('change', updatePreview);
+
+document.getElementById('unlimited-check').addEventListener('change', function() {
+  document.getElementById('credits-field').classList.toggle('hidden', this.checked);
+  updatePreview();
+});
+updatePreview();  // init preview on load
+
+// ── Save button ────────────────────────────────────────────────────────
+document.getElementById('save-btn').addEventListener('click', function() {
+  var name   = document.getElementById('f-name').value.trim();
+  var months = document.getElementById('f-months').value;
+  var price  = document.getElementById('f-price').value;
+  var err    = document.getElementById('form-error');
+
+  if (!name || !months || !price) {
+    err.classList.remove('hidden');
+    err.textContent = 'Please fill in: Name, Duration, and Price.';
+    return;
+  }
+  err.classList.add('hidden');
+  // Prototype: just redirect back with a success signal
+  alert('Plan "' + name + '" ' + (mode==='edit'?'updated':'created') + '! (prototype — no server yet)');
+  window.location.href = 'plans.html';
+});
+</script>
+</body>
+</html>
