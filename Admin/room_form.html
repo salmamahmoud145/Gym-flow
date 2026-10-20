@@ -13,10 +13,8 @@
       </header>
 
       <section class="panel">
-        <div class="alert alert-warn hidden" id="save-notice" role="status">
-          This static prototype has no backend, so room changes were not saved.
-        </div>
-        <form onsubmit="event.preventDefault(); document.getElementById('save-notice').classList.remove('hidden');">
+        <form method="post">
+          <input type="hidden" name="csrf" value="" />
 
           <div class="form-grid">
             <div class="field">
