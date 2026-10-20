@@ -46,12 +46,11 @@
   <!-- ── Admin sidebar ── -->
   <nav class="sidebar">
     <p class="sidebar-title">Admin</p>
-    <a href="members.html">Members</a>
+    <a href="../adminA/members.html">Members</a>
     <a href="plans.html" class="is-active">Plans</a>
     <a href="payments.html">Payments</a>
-    <a href="freeze_requests.html">Freeze Requests</a>
-    <a href="classes.html">Classes</a>
-    <a href="bookings.html">Bookings</a>
+    <a href="../Admin/classes.html">Classes</a>
+    <a href="../memberE/dashboard1.html#bookings">Bookings</a>
   </nav>
 
   <main class="main">
@@ -161,7 +160,7 @@ function renderPlans() {
       '<td class="table-actions">' +
         '<a href="plan_form.html?mode=edit&id='+p.id+'">Edit</a>' +
         (canDelete
-          ? '<a href="#" class="danger" onclick="openDeleteModal('+p.id+'); return false;">Delete</a>'
+          ? '<button type="button" class="text-action danger" onclick="openDeleteModal('+p.id+')">Delete</button>'
           : '<span style="color:var(--muted); font-size:.85rem;">In use</span>') +
       '</td>' +
       '</tr>';

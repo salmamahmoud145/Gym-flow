@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Payment receipt - GymFlow</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+      <a class="btn btn-sm" href="../admin/payments.html">Back to payments</a>
+    </div>
+  </header>
+
+  <main class="auth">
+    <section class="auth-card">
+      <h1>Payment receipt</h1>
+      <div class="alert alert-bad hidden" id="receipt-error" role="alert"></div>
+      <dl class="kv" id="receipt-details"></dl>
+      <button class="btn btn-ghost" type="button" onclick="window.print()">Print receipt</button>
+    </section>
+  </main>
+
+  <script>
+    const payments = {
+      '1': { receipt: 'REC-20261001-A1B2C3D4', member: 'Sara M.', plan: 'Standard', amount: 650, date: '2026-10-01' },
+      '2': { receipt: 'REC-20261003-E5F6G7H8', member: 'Omar H.', plan: 'Premium', amount: 900, date: '2026-10-03' },
+      '3': { receipt: 'REC-20261005-I9J0K1L2', member: 'Nour A.', plan: 'Basic', amount: 400, date: '2026-10-05' },
+      '4': { receipt: 'REC-20261008-M3N4O5P6', member: 'Karim B.', plan: 'Standard', amount: 650, date: '2026-10-08' },
+      '5': { receipt: 'REC-20261010-Q7R8S9T0', member: 'Laila F.', plan: 'Premium', amount: 900, date: '2026-10-10' },
+      '6': { receipt: 'REC-20261012-U1V2W3X4', member: 'Mina Y.', plan: 'Basic', amount: 400, date: '2026-10-12' },
+      '7': { receipt: 'REC-20261015-Y5Z6A7B8', member: 'Dina S.', plan: 'Standard', amount: 650, date: '2026-10-15' },
+      '8': { receipt: 'REC-20261016-C9D0E1F2', member: 'Youssef R.', plan: 'Basic', amount: 400, date: '2026-10-16' },
+      '9': { receipt: 'REC-20261017-G3H4I5J6', member: 'Rania M.', plan: 'Premium', amount: 900, date: '2026-10-17' },
+      '10': { receipt: 'REC-20261018-K7L8M9N0', member: 'Fady T.', plan: 'Standard', amount: 650, date: '2026-10-18' }
+    };
+    const payment = payments[new URLSearchParams(window.location.search).get('payment_id')];
+    if (payment) {
+      const details = document.getElementById('receipt-details');
+      [['Receipt number', payment.receipt], ['Member', payment.member], ['Plan', payment.plan],
+       ['Amount', `EGP ${payment.amount.toFixed(2)}`], ['Date', payment.date]].forEach(([label, value]) => {
+        const term = document.createElement('dt');
+        const description = document.createElement('dd');
+        term.textContent = label;
+        description.textContent = value;
+        details.append(term, description);
+      });
+    } else {
+      const error = document.getElementById('receipt-error');
+      error.textContent = 'This receipt number is invalid or unavailable.';
+      error.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

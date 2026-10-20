@@ -35,24 +35,16 @@
           <td>
             <a href="class_form.html?id=1">Edit</a>
             <form
-              method="post"
               style="display: inline"
-              onsubmit="
-                return confirm(
-                  'Cancel this class? Bookings will be cancelled and credits returned.',
-                );
-              "
+              onsubmit="event.preventDefault(); if (confirm('Cancel this class? Bookings will be cancelled and credits returned.')) alert('This static prototype has no backend, so the class was not changed.');"
             >
-              <input type="hidden" name="csrf" value="" />
               <input type="hidden" name="class_id" value="1" />
               <button name="cancel" value="1">Cancel</button>
             </form>
             <form
-              method="post"
               style="display: inline"
-              onsubmit="return confirm('Delete this class permanently?');"
+              onsubmit="event.preventDefault(); if (confirm('Delete this class permanently?')) alert('This static prototype has no backend, so the class was not deleted.');"
             >
-              <input type="hidden" name="csrf" value="" />
               <input type="hidden" name="class_id" value="1" />
               <button name="delete" value="1">Delete</button>
             </form>
