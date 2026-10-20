@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Processing your GymFlow payment.">
+  <title>Processing Payment – GymFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .gateway-wrap {
+      display: grid;
+      place-items: center;
+      min-height: calc(100vh - 82px);
+      padding: 40px 20px;
+      background: var(--chalk);
+    }
+    .gateway-card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--paper);
+      border: var(--line);
+      box-shadow: 10px 10px 0 var(--cobalt);
+      padding: 44px;
+      text-align: center;
+    }
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      display: inline-block;
+      width: 56px; height: 56px;
+      border: 5px solid var(--concrete);
+      border-top-color: var(--cobalt);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin-bottom: 24px;
+    }
+    /* Checkmark */
+    .checkmark {
+      display: none;
+      width: 64px; height: 64px;
+      background: var(--go);
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .checkmark::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-58%) rotate(-45deg);
+      width: 30px; height: 16px;
+      border-left: 5px solid #fff;
+      border-bottom: 5px solid #fff;
+      border-radius: 2px;
+    }
+    @keyframes check-pop { from { transform: scale(0); opacity:0; } to { transform: scale(1); opacity:1; } }
+    .checkmark.show { display: block; animation: check-pop .35s cubic-bezier(.2,.8,.2,1) both; }
+
+    /* X mark (failure) */
+    .xmark {
+      display: none;
+      width: 64px; height: 64px;
+      background: var(--stop);
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .xmark::before, .xmark::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 32px; height: 5px;
+      background: #fff;
+      border-radius: 3px;
+    }
+    .xmark::before { transform: translate(-50%,-50%) rotate(45deg); }
+    .xmark::after  { transform: translate(-50%,-50%) rotate(-45deg); }
+    .xmark.show { display: block; }
+
+    .progress-bar-wrap {
+      height: 8px;
+      background: var(--concrete);
+      border: 2px solid var(--ink);
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    @keyframes fill-bar { from { width:0; } to { width: 100%; } }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--cobalt);
+      width: 0;
+    }
+    .progress-bar-fill.running {
+      animation: fill-bar 2.2s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    .step-list {
+      list-style: none;
+      padding: 0; margin: 24px 0;
+      text-align: left;
+    }
+    .step-list li {
+      padding: 10px 0;
+      border-top: 2px solid var(--concrete);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+    }
+    .step-list li:first-child { border-top: 0; }
+    .step-dot {
+      width: 20px; height: 20px;
+      border: 3px solid var(--concrete);
+      border-radius: 50%;
+      flex: none;
+      transition: background .3s, border-color .3s;
+    }
+    .step-dot.done { background: var(--go); border-color: var(--go); }
+    .step-dot.active { border-color: var(--cobalt); animation: pulse-dot .6s ease infinite alternate; }
+    @keyframes pulse-dot { from { opacity:.5; } to { opacity:1; } }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <span class="user">Sara M.</span>
+    </nav>
+  </div>
+</header>
+
+<div class="gateway-wrap">
+  <div class="gateway-card">
+
+    <!-- Processing state -->
+    <div id="state-processing">
+      <div class="spinner" id="spinner"></div>
+      <h1 style="font-size:2rem; margin-bottom:8px;">Processing payment…</h1>
+      <p class="muted">Please do not close this window.</p>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="prog-bar"></div>
+      </div>
+      <ul class="step-list" id="step-list">
+        <li><span class="step-dot" id="dot-1"></span><span id="lbl-1">Verifying details</span></li>
+        <li><span class="step-dot" id="dot-2"></span><span id="lbl-2">Contacting payment gateway</span></li>
+        <li><span class="step-dot" id="dot-3"></span><span id="lbl-3">Creating your subscription</span></li>
+        <li><span class="step-dot" id="dot-4"></span><span id="lbl-4">Generating receipt</span></li>
+      </ul>
+    </div>
+
+    <!-- Success state (hidden initially) -->
+    <div id="state-success" class="hidden">
+      <div class="checkmark show" id="check-icon"></div>
+      <h1 style="font-size:2.4rem; margin-bottom:8px;">Payment confirmed!</h1>
+      <p class="muted" style="margin-bottom:24px;">Your subscription is now active. Redirecting to your receipt…</p>
+      <div id="summary-block" style="text-align:left; margin-bottom:28px;"></div>
+      <a class="btn btn-primary btn-lg btn-block" href="receipt.html" id="receipt-btn">View receipt →</a>
+    </div>
+
+    <!-- Failure state (hidden initially) -->
+    <div id="state-failure" class="hidden">
+      <div class="xmark show"></div>
+      <h1 style="font-size:2rem; margin-bottom:8px;">Payment failed</h1>
+      <p class="muted" style="margin-bottom:24px;">Something went wrong. Please try again or choose a different method.</p>
+      <div class="form-actions" style="justify-content:center;">
+        <a class="btn btn-primary" href="checkout.html">Try again</a>
+        <a class="btn btn-ghost" href="plans.html">Back to plans</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── Read checkout data from sessionStorage ─────────────────────────────
+var raw = sessionStorage.getItem('gf_checkout');
+var order = raw ? JSON.parse(raw) : {
+  plan_name:'Standard', price:650, credits:'16 classes',
+  start:'2026-10-18', end:'2026-11-18', method:'online', is_renew:false
+};
+
+// ── Simulate processing steps ──────────────────────────────────────────
+var steps = ['dot-1','dot-2','dot-3','dot-4'];
+var prog  = document.getElementById('prog-bar');
+var SIMULATE_FAILURE = false;  // flip to true to demo the failure screen
+
+prog.classList.add('running');
+
+function activateDot(i) {
+  if (steps[i]) document.getElementById(steps[i]).className = 'step-dot active';
+}
+function doneDot(i) {
+  if (steps[i]) document.getElementById(steps[i]).className = 'step-dot done';
+}
+
+activateDot(0);
+setTimeout(function(){ doneDot(0); activateDot(1); }, 600);
+setTimeout(function(){ doneDot(1); activateDot(2); }, 1200);
+setTimeout(function(){ doneDot(2); activateDot(3); }, 1800);
+setTimeout(function(){
+  doneDot(3);
+  if (SIMULATE_FAILURE) {
+    showState('failure');
+  } else {
+    // Generate a mock receipt number and store it
+    var rNo = 'REC-' + new Date().toISOString().slice(0,10).replace(/-/g,'')
+              + '-' + Math.random().toString(16).slice(2,10).toUpperCase().slice(0,8);
+    order.receipt_no = rNo;
+    sessionStorage.setItem('gf_receipt', JSON.stringify(order));
+    showSuccess();
+  }
+}, 2400);
+
+function showState(name) {
+  document.getElementById('state-processing').classList.add('hidden');
+  document.getElementById('state-success').classList.add('hidden');
+  document.getElementById('state-failure').classList.add('hidden');
+  document.getElementById('state-' + name).classList.remove('hidden');
+}
+
+function showSuccess() {
+  showState('success');
+  // Populate summary
+  var sb = document.getElementById('summary-block');
+  sb.innerHTML =
+    '<dl class="kv">' +
+    '<dt>Plan</dt><dd>' + order.plan_name + '</dd>' +
+    '<dt>Amount charged</dt><dd>EGP ' + parseFloat(order.price).toFixed(2) + '</dd>' +
+    '<dt>Credits</dt><dd>' + order.credits + '</dd>' +
+    '<dt>Valid</dt><dd>' + order.start + ' → ' + order.end + '</dd>' +
+    '<dt>Receipt no.</dt><dd>' + order.receipt_no + '</dd>' +
+    '</dl>';
+  // Auto-redirect after 3 s
+  setTimeout(function(){ window.location.href = 'receipt.html'; }, 3000);
+}
+</script>
+</body>
+</html>

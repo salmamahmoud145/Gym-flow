@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Confirm your GymFlow membership subscription and choose how to pay.">
+  <title>Checkout – GymFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr);
+      gap: 30px;
+      align-items: start;
+    }
+    .summary-box { position: sticky; top: 110px; }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 2px solid var(--concrete);
+      font-size: .98rem;
+    }
+    .summary-row:last-child { border-bottom: 0; }
+    .summary-total { font-family: var(--font-display); font-size: 2rem; font-weight: 900; }
+    .method-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 18px;
+      border: var(--line);
+      cursor: pointer;
+      margin-bottom: 12px;
+      background: var(--paper);
+      transition: background .1s;
+    }
+    .method-option:hover { background: var(--info-bg); }
+    .method-option.is-selected { background: var(--tape); border-color: var(--ink); box-shadow: var(--hard-sm); }
+    .method-option input[type=radio] { margin-top: 4px; flex: none; }
+    .method-label { font-weight: 700; font-size: 1rem; }
+    .method-desc  { font-size: .88rem; color: var(--muted); margin-top: 2px; }
+    #card-fields  { margin-top: 18px; }
+    .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 720px) { .checkout-grid { grid-template-columns: minmax(0,1fr); } }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <span class="user">Sara M.</span>
+      <a href="../login.html" class="btn btn-sm">Log out</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <nav class="sidebar">
+    <p class="sidebar-title">Member</p>
+    <a href="profile.html">Dashboard</a>
+    <a href="plans.html" class="is-active">Plans</a>
+    <a href="bookings.html">My Bookings</a>
+    <a href="profile.html">My Profile</a>
+    <a href="freeze_request.html">Freeze Request</a>
+  </nav>
+
+  <main class="main">
+    <div class="page-head">
+      <h1 class="page-title">Checkout</h1>
+      <p class="page-sub">Review your plan and choose how to pay.</p>
+    </div>
+
+    <div class="checkout-grid">
+
+      <!-- ── Left: form ── -->
+      <div>
+
+        <!-- Step 1: Start date -->
+        <div class="panel" style="margin-bottom:24px;">
+          <h2 class="panel-title">1 — Start date</h2>
+          <div class="field">
+            <label for="start-date">When do you want your plan to begin? <span class="req">*</span></label>
+            <input class="input" type="date" id="start-date" name="start_date">
+            <span class="field-hint">Your end date is computed automatically (1 calendar month).</span>
+          </div>
+          <div class="row" style="gap:32px; margin-top:10px;">
+            <div>
+              <div class="muted" style="font-size:.88rem;">Start date</div>
+              <div id="display-start" style="font-weight:700; font-size:1.1rem;">—</div>
+            </div>
+            <div>
+              <div class="muted" style="font-size:.88rem;">End date</div>
+              <div id="display-end" style="font-weight:700; font-size:1.1rem; color:var(--cobalt);">—</div>
+            </div>
+            <div>
+              <div class="muted" style="font-size:.88rem;">Duration</div>
+              <div style="font-weight:700; font-size:1.1rem;" id="display-duration">1 month</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Payment method -->
+        <div class="panel" style="margin-bottom:24px;">
+          <h2 class="panel-title">2 — Payment method</h2>
+
+          <label class="method-option is-selected" id="opt-online" for="method-online">
+            <input type="radio" id="method-online" name="method" value="online" checked>
+            <div>
+              <div class="method-label">💳 Pay online</div>
+              <div class="method-desc">Secure simulated card payment. Instant confirmation.</div>
+            </div>
+          </label>
+
+          <label class="method-option" id="opt-reception" for="method-reception">
+            <input type="radio" id="method-reception" name="method" value="reception">
+            <div>
+              <div class="method-label">🏢 Pay at reception</div>
+              <div class="method-desc">Cash or card at the gym desk. An admin records your payment.</div>
+            </div>
+          </label>
+
+          <!-- Card fields (shown only for online) -->
+          <div id="card-fields">
+            <div class="field">
+              <label for="card-name">Name on card <span class="req">*</span></label>
+              <input class="input" type="text" id="card-name" placeholder="Sara Mohamed">
+            </div>
+            <div class="field">
+              <label for="card-num">Card number <span class="req">*</span></label>
+              <input class="input" type="text" id="card-num" placeholder="4111 1111 1111 1111" maxlength="19">
+            </div>
+            <div class="card-row">
+              <div class="field">
+                <label for="card-exp">Expiry <span class="req">*</span></label>
+                <input class="input" type="text" id="card-exp" placeholder="MM/YY" maxlength="5">
+              </div>
+              <div class="field">
+                <label for="card-cvv">CVV <span class="req">*</span></label>
+                <input class="input" type="text" id="card-cvv" placeholder="123" maxlength="4">
+              </div>
+            </div>
+          </div>
+
+          <!-- Reception notice (hidden by default) -->
+          <div class="alert alert-warn hidden" id="reception-notice">
+            Your subscription will be created immediately. An admin will record your cash payment when you visit the gym. Bring this receipt number when you arrive.
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary btn-lg" id="pay-btn" type="button">Confirm &amp; Pay</button>
+          <a class="btn btn-ghost" href="plans.html">← Back to plans</a>
+        </div>
+
+      </div><!-- /left -->
+
+      <!-- ── Right: summary ── -->
+      <div class="summary-box">
+        <div class="panel">
+          <h2 class="panel-title">Order summary</h2>
+          <div class="summary-row"><span>Plan</span><strong id="sum-plan">Standard</strong></div>
+          <div class="summary-row"><span>Duration</span><span id="sum-duration">1 month</span></div>
+          <div class="summary-row"><span>Credits</span><span id="sum-credits">16 classes</span></div>
+          <div class="summary-row"><span>Start date</span><span id="sum-start">—</span></div>
+          <div class="summary-row"><span>End date</span><span id="sum-end">—</span></div>
+          <div class="summary-row" style="margin-top:8px; padding-top:14px; border-top: var(--line);">
+            <span>Total</span>
+            <span class="summary-total" id="sum-total">EGP 650.00</span>
+          </div>
+          <div class="muted" style="font-size:.83rem; margin-top:12px;">
+            Prices in Egyptian Pounds (EGP). Subscription auto-expires when end date or credits run out.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /checkout-grid -->
+  </main>
+</div>
+
+<footer class="site-footer">GymFlow — University Software Engineering project, Phase 1 prototype.</footer>
+
+<script>
+// ── Plan data (prototype – will come from PHP/DB in Phase 2) ──────────
+var PLANS = {
+  '1': { name: 'Basic',    price: 400, credits: '8 classes',      months: 1 },
+  '2': { name: 'Standard', price: 650, credits: '16 classes',     months: 1 },
+  '3': { name: 'Premium',  price: 900, credits: 'Unlimited',      months: 1 },
+};
+
+// Read ?plan_id from URL
+var params  = new URLSearchParams(window.location.search);
+var planId  = params.get('plan_id') || '2';
+var isRenew = params.get('renew') === '1';
+var plan    = PLANS[planId] || PLANS['2'];
+
+// Populate summary sidebar
+document.getElementById('sum-plan').textContent    = plan.name;
+document.getElementById('sum-duration').textContent = plan.months + ' month';
+document.getElementById('sum-credits').textContent  = plan.credits;
+document.getElementById('sum-total').textContent    = 'EGP ' + plan.price.toFixed(2);
+
+// Update page heading for renewal
+if (isRenew) {
+  document.querySelector('.page-sub').textContent = 'Renewing your ' + plan.name + ' plan.';
+}
+
+// ── Date logic ─────────────────────────────────────────────────────────
+var startInput = document.getElementById('start-date');
+// Default to today
+var today = new Date();
+startInput.value = today.toISOString().slice(0, 10);
+startInput.min   = today.toISOString().slice(0, 10);
+
+function addMonths(date, n) {
+  var d = new Date(date);
+  d.setMonth(d.getMonth() + n);
+  return d;
+}
+function fmt(d) {
+  return d.toLocaleDateString('en-EG', { year:'numeric', month:'short', day:'numeric' });
+}
+function fmtISO(d) {
+  return d.toISOString().slice(0,10);
+}
+
+function updateDates() {
+  if (!startInput.value) return;
+  var start = new Date(startInput.value);
+  var end   = addMonths(start, plan.months);
+
+  document.getElementById('display-start').textContent = fmt(start);
+  document.getElementById('display-end').textContent   = fmt(end);
+  document.getElementById('sum-start').textContent     = fmtISO(start);
+  document.getElementById('sum-end').textContent       = fmtISO(end);
+}
+startInput.addEventListener('change', updateDates);
+updateDates();
+
+// ── Payment method toggle ──────────────────────────────────────────────
+var optOnline    = document.getElementById('opt-online');
+var optReception = document.getElementById('opt-reception');
+var cardFields   = document.getElementById('card-fields');
+var recNotice    = document.getElementById('reception-notice');
+
+document.querySelectorAll('input[name=method]').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+    var isOnline = this.value === 'online';
+    optOnline.classList.toggle('is-selected', isOnline);
+    optReception.classList.toggle('is-selected', !isOnline);
+    cardFields.classList.toggle('hidden', !isOnline);
+    recNotice.classList.toggle('hidden', isOnline);
+  });
+});
+
+// ── Card number formatting ─────────────────────────────────────────────
+document.getElementById('card-num').addEventListener('input', function() {
+  var v = this.value.replace(/\D/g,'').substring(0,16);
+  this.value = v.replace(/(.{4})/g,'$1 ').trim();
+});
+document.getElementById('card-exp').addEventListener('input', function() {
+  var v = this.value.replace(/\D/g,'').substring(0,4);
+  if (v.length >= 2) v = v.slice(0,2) + '/' + v.slice(2);
+  this.value = v;
+});
+
+// ── Pay button ─────────────────────────────────────────────────────────
+document.getElementById('pay-btn').addEventListener('click', function() {
+  var method = document.querySelector('input[name=method]:checked').value;
+  if (!startInput.value) {
+    alert('Please choose a start date.');
+    return;
+  }
+  if (method === 'online') {
+    var name = document.getElementById('card-name').value.trim();
+    var num  = document.getElementById('card-num').value.replace(/\s/g,'');
+    var exp  = document.getElementById('card-exp').value;
+    var cvv  = document.getElementById('card-cvv').value;
+    if (!name || num.length < 16 || exp.length < 5 || cvv.length < 3) {
+      alert('Please fill in all card details.');
+      return;
+    }
+  }
+  // Prototype: store data in sessionStorage, then navigate to payment_process
+  sessionStorage.setItem('gf_checkout', JSON.stringify({
+    plan_id: planId,
+    plan_name: plan.name,
+    price: plan.price,
+    credits: plan.credits,
+    months: plan.months,
+    start: startInput.value,
+    end: document.getElementById('sum-end').textContent,
+    method: method,
+    is_renew: isRenew
+  }));
+  window.location.href = 'payment_process.html';
+});
+</script>
+</body>
+</html>

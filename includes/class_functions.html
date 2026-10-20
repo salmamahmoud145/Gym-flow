@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Class Functions & Utilities</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <h1>Class Logic &amp; Utilities Demo</h1>
+
+    <!-- FR-AV-02 Class Status Badges -->
+    <section>
+      <h2>Class Status Indicators</h2>
+      <p>
+        <span class="badge status-available">Available</span>
+        <span class="badge status-almost-full">Almost full</span>
+        <span class="badge status-full">Full</span>
+        <span class="badge status-cancelled">Cancelled</span>
+      </p>
+    </section>
+
+    <!-- FR-CL-06 Conflict Message -->
+    <section>
+      <h2>Schedule Conflict Alert</h2>
+      <p class="error">
+        The trainer is already used by &quot;Morning Yoga&quot; on 2026-10-20
+        from 09:00 to 10:00 (room: Studio A).
+      </p>
+    </section>
+
+    <!-- FR-CL-04 Cancellation Notification -->
+    <section>
+      <h2>Cancellation Notice Example</h2>
+      <p class="notice">
+        Your class &quot;Morning Yoga&quot; on 2026-10-20 at 09:00 was
+        cancelled. Your credits were returned.
+      </p>
+    </section>
+
+    <!-- FR-CL-05 Weekly Series Preview -->
+    <section>
+      <h2>Weekly Series Generator</h2>
+      <form onsubmit="return false;">
+        <label
+          >Start Date <input type="date" value="2026-10-20" readonly
+        /></label>
+        <label>Repeat Weeks <input type="number" value="4" readonly /></label>
+        <p>
+          <small
+            >Generates recurring scheduled entries across consecutive weeks
+            without schedule overlaps.</small
+          >
+        </p>
+      </form>
+    </section>
+  </body>
+</html>
