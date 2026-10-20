@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit member - GymFlow</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <span class="user">Admin</span>
+      <a class="btn btn-accent btn-sm" href="../login.html">Log out</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="sidebar">
+    <p class="sidebar-title">Admin area</p>
+    <a href="../adminE/dashboard.html">Dashboard</a>
+    <a class="is-active" href="members.html">Members</a>
+    <a href="../Admin/trainers.html">Trainers</a>
+    <a href="../admin/plans.html">Plans</a>
+    <a href="../Admin/classes.html">Classes</a>
+    <a href="../memberE/dashboard1.html#bookings">Bookings</a>
+    <a href="../admin/payments.html">Payments</a>
+    <a href="../adminE/checkin.html">Check-in</a>
+    <a href="../adminE/reports.html">Reports</a>
+  </aside>
+
+  <main class="main">
+    <div class="page-head">
+      <h1 class="page-title">Edit member</h1>
+      <p class="page-sub">M-0103, Laila Hassan</p>
+    </div>
+
+    <div class="split">
+
+      <section class="panel">
+        <form onsubmit="event.preventDefault();window.location.href='members.html';">
+          <div class="form-grid">
+            <div class="field">
+              <label for="name">Full name <span class="req">*</span></label>
+              <input class="input" id="name" value="Laila Hassan">
+            </div>
+            <div class="field">
+              <label for="email">Email <span class="req">*</span></label>
+              <input class="input" id="email" type="email" value="laila@example.com">
+            </div>
+            <div class="field">
+              <label for="phone">Phone <span class="req">*</span></label>
+              <input class="input" id="phone" type="tel" value="01155512345">
+            </div>
+            <div class="field">
+              <label for="dob">Date of birth</label>
+              <input class="input" id="dob" type="date" value="1998-03-14">
+            </div>
+            <div class="field">
+              <label for="gender">Gender</label>
+              <select class="select" id="gender"><option>Female</option><option>Male</option><option>Prefer not to say</option></select>
+            </div>
+            <div class="field">
+              <label for="emergency">Emergency contact</label>
+              <input class="input" id="emergency" value="Mother - 01234567890">
+            </div>
+            <div class="field">
+              <label for="plan">Membership plan</label>
+              <select class="select" id="plan"><option>Basic</option><option>Standard</option><option>Premium</option></select>
+            </div>
+            <div class="field">
+              <label for="start">Start date</label>
+              <input class="input" id="start" type="date" value="2026-09-19">
+            </div>
+            <div class="field">
+              <label for="status">Account status</label>
+              <select class="select" id="status"><option>Active</option><option>Suspended</option></select>
+            </div>
+            <div class="field">
+              <label for="notes">Notes</label>
+              <input class="input" id="notes" value="Prefers morning classes">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Save member</button>
+            <a class="btn" href="members.html">Cancel</a>
+            <button class="btn btn-danger push" type="button" onclick="document.getElementById('confirm').classList.remove('hidden')">Delete account</button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="panel">
+        <h2 class="panel-title">Member summary</h2>
+        <dl class="kv">
+          <dt>Membership</dt><dd><span class="badge badge-warn">Expiring</span></dd>
+          <dt>Bookings</dt><dd>9 upcoming, 21 past</dd>
+          <dt>Visits this month</dt><dd>8</dd>
+          <dt>No-shows</dt><dd>2</dd>
+          <dt>Payments</dt><dd>3 receipts</dd>
+          <dt>Class credits</dt><dd>2 of 8 left</dd>
+        </dl>
+      </aside>
+
+    </div>
+  </main>
+</div>
+
+<!-- Delete confirmation (FR-MM-05, NFR-US-06) -->
+<div class="modal-backdrop hidden" id="confirm">
+  <div class="modal">
+    <h2>Delete this account?</h2>
+    <p>Laila Hassan and all of her bookings, attendance and payment records will be removed. This cannot be undone.</p>
+    <div class="form-actions">
+      <a class="btn btn-danger" href="members.html">Delete account</a>
+      <button class="btn" type="button" onclick="document.getElementById('confirm').classList.add('hidden')">Keep account</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

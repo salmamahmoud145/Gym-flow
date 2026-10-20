@@ -37,10 +37,8 @@
               <td class="table-actions">
                 <a class="btn btn-sm btn-ghost" href="room_form.html?id=1">Edit</a>
                 <form
-                  method="post"
-                  onsubmit="return confirm('Delete this room?');"
+                  onsubmit="event.preventDefault(); if (confirm('Delete this room?')) alert('This static prototype has no backend, so the room was not deleted.');"
                 >
-                  <input type="hidden" name="csrf" value="" />
                   <input type="hidden" name="delete_id" value="1" />
                   <button class="btn btn-sm btn-ghost" type="submit">Delete</button>
                 </form>
