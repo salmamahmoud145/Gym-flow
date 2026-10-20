@@ -4,9 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Member Dashboard - GymFlow</title>
-  <link rel="stylesheet" href="../style/style.css">
   <link rel="stylesheet" href="../assets/style.css">
-  <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 
@@ -22,7 +20,7 @@
       <button class="btn btn-sm btn-ghost" id="notif-toggle-btn" type="button" title="View notifications" style="position:relative; color:#fff;">
         🔔 <span id="notif-badge" class="badge badge-bad" style="padding:1px 6px; font-size:0.75rem;">2</span>
       </button>
-      <a class="btn btn-sm" href="#">Ahmed M.</a>
+      <span class="btn btn-sm">Ahmed M.</span>
       <a class="btn btn-sm btn-ghost" href="../login.html" style="color:#fff;">Log out</a>
     </nav>
   </div>
@@ -215,7 +213,7 @@
           </dl>
           <div style="margin-top:20px; display:flex; gap:10px;">
             <a href="../member/plans.html" class="btn btn-accent btn-sm grow center">Upgrade / Renew</a>
-            <a href="#bookings" class="btn btn-ghost btn-sm">Freeze</a>
+            <span class="btn btn-ghost btn-sm is-disabled" aria-disabled="true" title="Membership freeze requests are not available in this prototype">Freeze unavailable</span>
           </div>
         </div>
 
@@ -229,17 +227,17 @@
             <li class="notif-item unread" style="background:#FFF9D6; padding:10px; border-left:4px solid var(--tape);">
               <strong>Class Confirmed</strong>
               <p style="margin:2px 0 4px; font-size:0.9rem;">Your spot for Spinning with Omar H. today at 18:00 is confirmed.</p>
-              <small>2 hours ago &bull; <a href="#" class="dismiss-notif" style="font-size:0.8rem;">Dismiss</a></small>
+              <small>2 hours ago &bull; <button type="button" class="dismiss-notif" style="font-size:0.8rem;">Dismiss</button></small>
             </li>
             <li class="notif-item unread" style="background:#FFF9D6; padding:10px; border-left:4px solid var(--tape); margin-top:8px;">
               <strong>Waitlist Update</strong>
               <p style="margin:2px 0 4px; font-size:0.9rem;">You are now #1 in line for Boxing Conditioning on Thursday.</p>
-              <small>5 hours ago &bull; <a href="#" class="dismiss-notif" style="font-size:0.8rem;">Dismiss</a></small>
+              <small>5 hours ago &bull; <button type="button" class="dismiss-notif" style="font-size:0.8rem;">Dismiss</button></small>
             </li>
             <li class="notif-item" style="padding:10px; margin-top:8px;">
               <strong>Payment Received</strong>
               <p style="margin:2px 0 4px; font-size:0.9rem;">Receipt #INV-2026-881 for EGP 650.00 has been logged.</p>
-              <small>3 days ago &bull; <a href="#" class="dismiss-notif" style="font-size:0.8rem;">Dismiss</a></small>
+              <small>3 days ago &bull; <button type="button" class="dismiss-notif" style="font-size:0.8rem;">Dismiss</button></small>
             </li>
           </ul>
         </div>

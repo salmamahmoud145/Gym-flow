@@ -8,8 +8,10 @@
   <body>
     <h1>Add / Edit trainer</h1>
 
-    <form method="post">
-      <input type="hidden" name="csrf" value="" />
+    <div class="alert alert-warn hidden" id="save-notice" role="status">
+      This static prototype has no backend, so trainer changes were not saved.
+    </div>
+    <form onsubmit="event.preventDefault(); document.getElementById('save-notice').classList.remove('hidden');">
 
       <label
         >Account

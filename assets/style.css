@@ -439,6 +439,17 @@ p  { margin: 0 0 1em; }
 .table tbody tr:nth-child(even) { background: var(--chalk); }
 .table tbody tr:hover { background: var(--info-bg); }
 .table-actions a { margin-right: 14px; font-weight: 700; white-space: nowrap; }
+.table-actions button.text-action {
+  margin-right: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cobalt);
+  font: inherit;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
 .table-actions .danger { color: var(--stop); }
 .table-actions .danger:hover { color: #fff; background: var(--stop); }
 
@@ -552,7 +563,8 @@ p  { margin: 0 0 1em; }
 .tab.is-active { background: var(--tape); }
 
 .pager { display: flex; gap: 8px; }
-.pager a {
+.pager a,
+.pager span {
   display: grid;
   place-items: center;
   min-width: 44px;
@@ -564,7 +576,7 @@ p  { margin: 0 0 1em; }
   border: var(--line);
 }
 .pager a:hover { background: var(--tape); }
-.pager a.is-active { background: var(--cobalt); color: #fff; }
+.pager .is-active { background: var(--cobalt); color: #fff; }
 
 /* ---------- 11. Small parts ---------- */
 .alert {

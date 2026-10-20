@@ -32,12 +32,11 @@
 <div class="app">
   <nav class="sidebar no-print">
     <p class="sidebar-title">Admin</p>
-    <a href="members.html">Members</a>
+    <a href="../adminA/members.html">Members</a>
     <a href="plans.html">Plans</a>
     <a href="payments.html" class="is-active">Payments</a>
-    <a href="freeze_requests.html">Freeze Requests</a>
-    <a href="classes.html">Classes</a>
-    <a href="bookings.html">Bookings</a>
+    <a href="../Admin/classes.html">Classes</a>
+    <a href="../memberE/dashboard1.html#bookings">Bookings</a>
   </nav>
 
   <main class="main">
@@ -124,10 +123,10 @@
     <!-- Pager -->
     <div class="row no-print" style="margin-top:18px; justify-content:space-between; align-items:center;">
       <span class="muted" id="pager-info">Showing all results</span>
-      <div class="pager">
-        <a href="#" class="is-active">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
+      <div class="pager" aria-label="Pagination unavailable in this prototype">
+        <span class="is-active" aria-current="page">1</span>
+        <span aria-disabled="true">2</span>
+        <span aria-disabled="true">3</span>
       </div>
     </div>
 
@@ -177,8 +176,8 @@ function renderPayments(list) {
       '<td>' + statusBadge(p.status) + '</td>' +
       '<td>' + p.date + '</td>' +
       '<td class="table-actions no-print">' +
-        '<a href="../member/receipt.html" target="_blank">Receipt</a>' +
-        (p.status === 'pending' ? '<a href="#">Mark paid</a>' : '') +
+        '<a href="../member/receipt.html?payment_id='+p.id+'" target="_blank">Receipt</a>' +
+        (p.status === 'pending' ? '<button type="button" class="text-action" data-mark-paid-id="'+p.id+'">Mark paid</button>' : '') +
       '</td>' +
       '</tr>';
   });
@@ -217,6 +216,16 @@ function applyFilters() {
 ['filter-method','filter-status','filter-search'].forEach(function(id) {
   document.getElementById(id).addEventListener('input', applyFilters);
   document.getElementById(id).addEventListener('change', applyFilters);
+});
+document.getElementById('payments-tbody').addEventListener('click', function(event) {
+  var button = event.target.closest('[data-mark-paid-id]');
+  if (!button) return;
+  var payment = PAYMENTS.find(function(p) {
+    return p.id === Number(button.getAttribute('data-mark-paid-id'));
+  });
+  if (!payment) return;
+  payment.status = 'paid';
+  applyFilters();
 });
 document.getElementById('reset-btn').addEventListener('click', function() {
   document.getElementById('filter-method').value  = '';
