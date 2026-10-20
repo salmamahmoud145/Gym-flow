@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My classes - GymFlow</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+      <nav class="nav" aria-label="Trainer navigation">
+        <a href="dashboard.html">Dashboard</a>
+        <a class="is-active" href="my_classes.html">My classes &amp; rosters</a>
+        <a href="notes.html">Member notes</a>
+        <a class="btn btn-accent btn-sm" href="../login.html">Log out</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-head">
+      <h1 class="page-title">My classes and rosters</h1>
+      <p class="page-sub">Check your schedule and open a class roster to view member bookings.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">Class</th>
+            <th scope="col">Room</th>
+            <th scope="col">Booked</th>
+            <th scope="col">Status</th>
+            <th scope="col">Roster</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2026-10-20</td>
+            <td>09:00-10:00</td>
+            <td>Morning Yoga</td>
+            <td>Studio A</td>
+            <td>10 / 20</td>
+            <td><span class="badge badge-ok">Available</span></td>
+            <td><a class="btn btn-sm" href="#roster">View roster</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <section class="section" id="roster">
+      <div class="page-head">
+        <h2 class="page-title">Roster: Morning Yoga</h2>
+        <p class="page-sub">20 Oct 2026 · 09:00-10:00 · Studio A</p>
+      </div>
+      <div class="panel">
+        <ul class="feed">
+          <li>
+            <strong>John Member</strong> <span class="muted">john@example.com</span>
+            <a class="btn btn-sm push" href="notes.html?member_id=1">Member notes</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">GymFlow. Software Engineering project, Phase 1 prototype.</footer>
+</body>
+</html>

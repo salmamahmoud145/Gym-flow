@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Member dashboard - GymFlow</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+      <nav class="nav" aria-label="Main navigation">
+        <a class="is-active" href="dashboard.html">Dashboard</a>
+        <a href="schedule.html">Class schedule</a>
+        <a href="plans.html">Plans</a>
+        <a href="profile.html">My profile</a>
+        <a class="btn btn-accent btn-sm" href="../login.html">Log out</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-head">
+      <h1 class="page-title">Member dashboard</h1>
+      <p class="page-sub">Welcome back, Sara. Your membership and upcoming classes at a glance.</p>
+    </div>
+
+    <div class="grid cols-3">
+      <section class="tile tile-cobalt">
+        <span class="tile-label">Membership</span>
+        <strong class="tile-value">Standard</strong>
+        <span class="tile-note">Active until 18 Nov 2026</span>
+      </section>
+      <section class="tile tile-tape">
+        <span class="tile-label">Class credits</span>
+        <strong class="tile-value">10 / 16</strong>
+        <span class="tile-note">Credits remaining this month</span>
+      </section>
+      <section class="tile">
+        <span class="tile-label">Visits this month</span>
+        <strong class="tile-value">11</strong>
+        <span class="tile-note">Keep up the great work</span>
+      </section>
+    </div>
+
+    <section class="section">
+      <div class="row">
+        <h2 class="section-title grow">Upcoming class</h2>
+        <a class="btn btn-primary" href="schedule.html">Browse classes</a>
+      </div>
+      <div class="panel">
+        <div class="row">
+          <div class="grow">
+            <h3>Morning Yoga</h3>
+            <p class="muted">20 Oct 2026 · 09:00-10:00 · Studio A · Jane Doe</p>
+          </div>
+          <span class="badge badge-ok">Booked</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid cols-2">
+      <a class="panel" href="plans.html">
+        <h2 class="panel-title">Membership plans</h2>
+        <p>Review your plan, compare options, and see membership details.</p>
+      </a>
+      <a class="panel" href="profile.html">
+        <h2 class="panel-title">Profile and attendance</h2>
+        <p>Update your details and review your attendance history.</p>
+      </a>
+    </section>
+  </main>
+
+  <footer class="site-footer">GymFlow. Software Engineering project, Phase 1 prototype.</footer>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trainer dashboard - GymFlow</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+      <nav class="nav" aria-label="Trainer navigation">
+        <a class="is-active" href="dashboard.html">Dashboard</a>
+        <a href="my_classes.html">My classes &amp; rosters</a>
+        <a href="notes.html">Member notes</a>
+        <a class="btn btn-accent btn-sm" href="../login.html">Log out</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-head">
+      <h1 class="page-title">Trainer dashboard</h1>
+      <p class="page-sub">Welcome, Jane. Manage your classes, check rosters, and keep track of member progress.</p>
+    </div>
+
+    <div class="grid cols-3">
+      <section class="tile tile-cobalt">
+        <span class="tile-label">Classes today</span>
+        <strong class="tile-value">1</strong>
+        <span class="tile-note">Your scheduled sessions</span>
+      </section>
+      <section class="tile tile-tape">
+        <span class="tile-label">Booked spots</span>
+        <strong class="tile-value">10 / 20</strong>
+        <span class="tile-note">Across today's classes</span>
+      </section>
+      <section class="tile">
+        <span class="tile-label">Trainer tools</span>
+        <strong class="tile-value">2</strong>
+        <span class="tile-note">Classes and member notes</span>
+      </section>
+    </div>
+
+    <section class="section">
+      <div class="row">
+        <h2 class="section-title grow">Today's schedule</h2>
+        <a class="btn btn-primary" href="my_classes.html">View classes and rosters</a>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Time</th>
+              <th scope="col">Class</th>
+              <th scope="col">Room</th>
+              <th scope="col">Booked</th>
+              <th scope="col">Roster</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2026-10-20</td>
+              <td>09:00-10:00</td>
+              <td>Morning Yoga</td>
+              <td>Studio A</td>
+              <td>10 / 20</td>
+              <td><a class="btn btn-sm" href="my_classes.html?class_id=1">Open roster</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="grid cols-2">
+      <a class="panel" href="my_classes.html">
+        <h2 class="panel-title">Classes and rosters</h2>
+        <p>View your timetable and see the members booked into each session.</p>
+      </a>
+      <a class="panel" href="notes.html">
+        <h2 class="panel-title">Member notes</h2>
+        <p>Review progress notes or add a note for a member.</p>
+      </a>
+    </section>
+  </main>
+
+  <footer class="site-footer">GymFlow. Software Engineering project, Phase 1 prototype.</footer>
+</body>
+</html>
