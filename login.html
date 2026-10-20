@@ -59,7 +59,7 @@
     var pw = document.getElementById('password').value;
     var error = document.getElementById('login-error');
     if (email === '' || pw === '' || pw === 'wrong') { error.classList.remove('hidden'); return; }
-    window.location.href = email.indexOf('admin') !== -1 ? 'admin/members.html' : 'member/profile.html';
+    window.location.href = email.indexOf('admin') !== -1 ? 'adminA/members.html' : 'member/profile.html';
   });
 </script>
 
