@@ -3,63 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Plan checkout - GymFlow</title>
+  <title>Checkout unavailable - GymFlow</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="bar">
-      <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
-      <a class="btn btn-sm" href="../login.html">Log out</a>
-    </div>
-  </header>
-
-  <main class="auth">
-    <section class="auth-card">
-      <h1>Plan checkout</h1>
-      <p class="muted" id="plan-summary"></p>
-      <div class="alert alert-bad hidden" id="checkout-error" role="alert"></div>
-      <div class="alert alert-ok hidden" id="checkout-notice" role="status">
-        This prototype has no payment service connected. No payment was processed.
-      </div>
-      <form id="checkout-form">
-        <div class="field">
-          <label for="payment-method">Payment method</label>
-          <select class="select" id="payment-method" required>
-            <option value="">Choose a payment method</option>
-            <option value="reception">Pay at reception</option>
-            <option value="card">Card (demo only)</option>
-          </select>
-        </div>
-        <button class="btn btn-primary btn-block" type="submit">Continue</button>
-      </form>
-      <p class="center" style="margin-top:20px"><a href="plans.html">Back to plans</a></p>
-    </section>
+  <main class="container">
+    <h1>Checkout is not available</h1>
+    <p>This static prototype does not process payments or change memberships.</p>
+    <p><a href="plans.html">Back to membership plans</a> | <a href="profile.html">Member dashboard</a></p>
   </main>
-
-  <script>
-    const plans = {
-      '1': { name: 'Basic', price: 400 },
-      '2': { name: 'Standard', price: 650 },
-      '3': { name: 'Premium', price: 900 }
-    };
-    const plan = plans[new URLSearchParams(window.location.search).get('plan_id')];
-    const summary = document.getElementById('plan-summary');
-    const error = document.getElementById('checkout-error');
-    const form = document.getElementById('checkout-form');
-
-    if (plan) {
-      summary.textContent = `${plan.name} plan — EGP ${plan.price} per month.`;
-    } else {
-      error.textContent = 'Choose a valid plan from the membership plans page.';
-      error.classList.remove('hidden');
-      form.querySelector('button[type="submit"]').disabled = true;
-    }
-
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      document.getElementById('checkout-notice').classList.remove('hidden');
-    });
-  </script>
 </body>
 </html>
