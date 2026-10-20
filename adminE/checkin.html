@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reception Check-In - GymFlow</title>
+  <link rel="stylesheet" href="../style/style.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="../index.html"><span class="brand-mark">G</span>GymFlow</a>
+    <nav class="nav">
+      <span class="badge badge-bad" style="background:#fff; color:var(--stop); font-weight:800;">ADMIN</span>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="checkin.html" class="is-active">Reception Check-In</a>
+      <a href="reports.html">Reports</a>
+      <a href="../memberE/dashboard1.html" title="Switch to Member View" style="opacity:0.85; font-size:0.9rem;">Member View</a>
+      <a href="../trainer/attendance.html" title="Switch to Trainer View" style="opacity:0.85; font-size:0.9rem;">Trainer View</a>
+      <a class="btn btn-sm" href="#">Staff Account</a>
+      <a class="btn btn-sm btn-ghost" href="../login.html" style="color:#fff;">Log out</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <!-- Admin Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-title">OPERATIONS</div>
+    <a href="dashboard.html">Dashboard Overview</a>
+    <a href="checkin.html" class="is-active">Reception Check-In</a>
+    <a href="reports.html">Reports &amp; Analytics</a>
+
+    <div class="sidebar-title" style="margin-top:20px;">MEMBERS &amp; PLANS</div>
+    <a href="../admin/plans.html">Membership Plans</a>
+    <a href="../admin/plan_form.html">Create Plan</a>
+
+    <div class="sidebar-title" style="margin-top:20px;">SCHEDULING &amp; BOOKING</div>
+    <a href="../admin/classes.html">Classes &amp; Timetable</a>
+    <a href="../admin/rooms.html">Rooms Management</a>
+
+    <div class="sidebar-title" style="margin-top:20px;">PORTAL SWITCHER</div>
+    <a href="../memberE/dashboard1.html">Member Portal</a>
+    <a href="../trainer/attendance.html">Trainer Portal</a>
+    <a href="../index.html" style="margin-top:16px; border-top:1px solid #333866; padding-top:14px;">GymFlow Home</a>
+    <a href="../login.html">Log Out</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="page-head">
+      <h1 class="page-title">Reception Check-In Desk</h1>
+      <p class="page-sub">Scan member card, search by phone number or ID, and verify membership status before admitting entry.</p>
+    </div>
+
+    <!-- Live Facility Occupancy Stats -->
+    <div class="grid cols-3" style="margin-bottom: 24px;">
+      <div class="tile tile-cobalt">
+        <span class="tile-label">Currently Inside Gym</span>
+        <div class="tile-value" id="current-occupancy-count">42</div>
+        <div class="tile-note">Max safe capacity: 80 athletes</div>
+      </div>
+      <div class="tile tile-tape">
+        <span class="tile-label">Total Visits Today</span>
+        <div class="tile-value" id="total-today-count">94</div>
+        <div class="tile-note">Since 06:00 opening</div>
+      </div>
+      <div class="tile tile-ink">
+        <span class="tile-label">Facility Status</span>
+        <div class="tile-value" style="font-size: 2.2rem; color:var(--tape);">NORMAL</div>
+        <div class="tile-note">52.5% facility load &bull; Studios A &amp; B active</div>
+      </div>
+    </div>
+
+    <!-- Check-In Action Section (Split: Search/Verification Card on left, Live Log on right) -->
+    <div class="split">
+      <!-- Search and Verification Panel -->
+      <div class="stack">
+        <div class="panel">
+          <h2 class="panel-title">Member Lookup &amp; Verify</h2>
+
+          <!-- Search Form -->
+          <form id="checkin-search-form" novalidate style="margin-bottom: 20px;">
+            <div class="field">
+              <label for="member-search-input">Scan Barcode / Enter Member ID or Phone <span class="req">*</span></label>
+              <div class="row" style="gap:10px;">
+                <input class="input" type="text" id="member-search-input" placeholder="e.g. 1001 or 01012345678" autofocus style="font-size:1.15rem; font-weight:700;">
+                <button type="submit" class="btn btn-primary" style="white-space:nowrap;">Search Member</button>
+              </div>
+              <div class="field-error hidden" id="search-error-msg">Please enter a valid numeric Member ID or phone number.</div>
+            </div>
+          </form>
+
+          <!-- Quick Test Demo Buttons -->
+          <div style="margin-bottom: 20px;">
+            <span class="muted" style="font-size:0.85rem; font-weight:700;">PROTOTYPE DEMO ACCOUNTS:</span>
+            <div class="row" style="gap:6px; margin-top:6px;">
+              <button type="button" class="btn btn-sm btn-ghost demo-btn" data-id="1001">#1001 (Active Plan)</button>
+              <button type="button" class="btn btn-sm btn-ghost demo-btn" data-id="1088">#1088 (Expired Plan)</button>
+              <button type="button" class="btn btn-sm btn-ghost demo-btn" data-id="1092">#1092 (Frozen Plan)</button>
+            </div>
+          </div>
+
+          <!-- Dynamic Verification Result Card -->
+          <div id="member-card-container" class="panel panel-flat" style="border: 2px solid var(--ink); background: var(--chalk); display: none;">
+            <div class="row" style="align-items: flex-start; margin-bottom: 16px;">
+              <div class="avatar" id="res-avatar" style="width:60px; height:60px; font-size:1.4rem;">AM</div>
+              <div style="margin-left: 8px;">
+                <h3 id="res-name" style="margin:0 0 4px;">Ahmed Mahmoud</h3>
+                <div class="muted" id="res-sub">Member #1001 &bull; 01012345678</div>
+              </div>
+              <span class="badge push" id="res-badge" style="font-size:1rem; padding:6px 14px;">Active</span>
+            </div>
+
+            <!-- Notification / Warning Box for Expired or Frozen accounts -->
+            <div class="alert alert-bad hidden" id="res-access-alert"></div>
+
+            <dl class="kv" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px 16px; margin-bottom: 16px;">
+              <div>
+                <dt>Membership Plan</dt>
+                <dd id="res-plan">Standard (16 classes)</dd>
+              </div>
+              <div>
+                <dt>Expiry Date</dt>
+                <dd id="res-expiry">Nov 15, 2026 (27 days left)</dd>
+              </div>
+              <div>
+                <dt>Remaining Credits</dt>
+                <dd id="res-credits">11 Classes</dd>
+              </div>
+              <div>
+                <dt>Class Booked Today?</dt>
+                <dd id="res-booking"><span class="badge badge-ok">18:00 Spinning (Studio B)</span></dd>
+              </div>
+            </dl>
+
+            <div class="form-actions" style="margin-top:20px;">
+              <button type="button" class="btn btn-accent btn-lg grow center" id="btn-confirm-checkin">
+                ✓ Confirm Check-In &amp; Admit
+              </button>
+              <button type="button" class="btn btn-ghost" id="btn-cancel-search">Clear</button>
+            </div>
+          </div>
+
+          <!-- Checkin Success Alert -->
+          <div class="alert alert-ok hidden" id="checkin-success-toast" style="margin-top:20px;">
+            🎉 <strong>Check-In Confirmed!</strong> <span id="toast-msg">Ahmed Mahmoud admitted to the gym floor.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Today's Visits Table -->
+      <div class="panel">
+        <div class="row" style="margin-bottom: 16px;">
+          <h2 class="panel-title" style="margin:0;">Today's Check-In Log</h2>
+          <span class="badge badge-info push">Live Stream</span>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table" id="checkins-log-table">
+            <thead>
+              <tr>
+                <th>Time In</th>
+                <th>Member</th>
+                <th>Plan</th>
+                <th>Class / Area</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="checkins-tbody">
+              <tr data-visit-id="v-94">
+                <td>17:55</td>
+                <td>
+                  <strong>Sara Youssef</strong>
+                  <div class="muted" style="font-size:0.8rem;">#1044</div>
+                </td>
+                <td><span class="badge badge-ok">Premium</span></td>
+                <td>18:00 Spinning</td>
+                <td><button type="button" class="btn btn-sm btn-ghost checkout-btn" data-visit="v-94">Check Out</button></td>
+              </tr>
+              <tr data-visit-id="v-93">
+                <td>17:42</td>
+                <td>
+                  <strong>Youssef Nabil</strong>
+                  <div class="muted" style="font-size:0.8rem;">#1120</div>
+                </td>
+                <td><span class="badge badge-ok">Standard</span></td>
+                <td>Gym Floor</td>
+                <td><button type="button" class="btn btn-sm btn-ghost checkout-btn" data-visit="v-93">Check Out</button></td>
+              </tr>
+              <tr data-visit-id="v-92">
+                <td>17:30</td>
+                <td>
+                  <strong>Nourhan Aly</strong>
+                  <div class="muted" style="font-size:0.8rem;">#1135</div>
+                </td>
+                <td><span class="badge badge-ok">Premium</span></td>
+                <td>Gym Floor</td>
+                <td><button type="button" class="btn btn-sm btn-ghost checkout-btn" data-visit="v-92">Check Out</button></td>
+              </tr>
+              <tr data-visit-id="v-91">
+                <td>16:45</td>
+                <td>
+                  <strong>Tamer Hosny</strong>
+                  <div class="muted" style="font-size:0.8rem;">#1012</div>
+                </td>
+                <td><span class="badge badge-ok">Basic</span></td>
+                <td>Gym Floor</td>
+                <td><span class="muted" style="font-size:0.85rem;">Checked out (17:50)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  GymFlow &bull; Gym Membership Management System
+</footer>
+
+<script>
+  // Simulated Member Database for Prototype
+  var memberDirectory = {
+    '1001': {
+      id: '1001',
+      name: 'Ahmed Mahmoud',
+      initials: 'AM',
+      phone: '01012345678',
+      status: 'active',
+      plan: 'Standard (16 classes/mo)',
+      expiry: 'Nov 15, 2026 (27 days left)',
+      credits: '11 Classes remaining',
+      todayClass: '18:00 Spinning (Studio B)'
+    },
+    '1088': {
+      id: '1088',
+      name: 'Laila Mostafa',
+      initials: 'LM',
+      phone: '01123456789',
+      status: 'expired',
+      plan: 'Basic (8 classes/mo)',
+      expiry: 'Oct 10, 2026 (Expired 9 days ago)',
+      credits: '0 Classes remaining',
+      todayClass: 'None'
+    },
+    '1092': {
+      id: '1092',
+      name: 'Hassan Gamal',
+      initials: 'HG',
+      phone: '01234567891',
+      status: 'frozen',
+      plan: 'Premium Unlimited',
+      expiry: 'Frozen until Nov 01, 2026',
+      credits: 'Unlimited (Frozen)',
+      todayClass: 'None'
+    }
+  };
+
+  var searchForm = document.getElementById('checkin-search-form');
+  var searchInput = document.getElementById('member-search-input');
+  var searchError = document.getElementById('search-error-msg');
+  var cardContainer = document.getElementById('member-card-container');
+  var confirmBtn = document.getElementById('btn-confirm-checkin');
+  var cancelBtn = document.getElementById('btn-cancel-search');
+  var successToast = document.getElementById('checkin-success-toast');
+  var toastMsg = document.getElementById('toast-msg');
+
+  var currentMember = null;
+
+  // Search Submission & Member Loading
+  function loadMember(idOrPhone) {
+    searchError.classList.add('hidden');
+    searchInput.parentElement.classList.remove('has-error');
+    successToast.classList.add('hidden');
+
+    var found = memberDirectory[idOrPhone];
+    // Also support searching by phone number
+    if (!found) {
+      for (var key in memberDirectory) {
+        if (memberDirectory[key].phone === idOrPhone) {
+          found = memberDirectory[key];
+          break;
+        }
+      }
+    }
+
+    if (!found) {
+      searchError.textContent = 'No member found matching "' + idOrPhone + '". Please check ID or register new member.';
+      searchError.classList.remove('hidden');
+      cardContainer.style.display = 'none';
+      return;
+    }
+
+    currentMember = found;
+    document.getElementById('res-avatar').textContent = found.initials;
+    document.getElementById('res-name').textContent = found.name;
+    document.getElementById('res-sub').textContent = 'Member #' + found.id + ' • ' + found.phone;
+    document.getElementById('res-plan').textContent = found.plan;
+    document.getElementById('res-expiry').textContent = found.expiry;
+    document.getElementById('res-credits').textContent = found.credits;
+    document.getElementById('res-booking').innerHTML = found.todayClass !== 'None' ? '<span class="badge badge-ok">' + found.todayClass + '</span>' : '<span class="muted">No class booked today</span>';
+
+    var badge = document.getElementById('res-badge');
+    var alertBox = document.getElementById('res-access-alert');
+
+    if (found.status === 'active') {
+      badge.className = 'badge badge-ok push';
+      badge.textContent = 'ACTIVE';
+      alertBox.classList.add('hidden');
+      confirmBtn.disabled = false;
+      confirmBtn.className = 'btn btn-accent btn-lg grow center';
+      confirmBtn.textContent = '✓ Confirm Check-In & Admit';
+    } else if (found.status === 'expired') {
+      badge.className = 'badge badge-bad push';
+      badge.textContent = 'EXPIRED';
+      alertBox.textContent = '⛔ ACCESS DENIED: Membership expired on ' + found.expiry + '. Please renew plan at reception before entering.';
+      alertBox.classList.remove('hidden');
+      confirmBtn.disabled = true;
+      confirmBtn.className = 'btn btn-ghost btn-lg grow center is-disabled';
+      confirmBtn.textContent = 'Cannot Admit (Expired)';
+    } else if (found.status === 'frozen') {
+      badge.className = 'badge badge-warn push';
+      badge.textContent = 'FROZEN';
+      alertBox.textContent = '❄️ ACCOUNT FROZEN: Membership is currently frozen until Nov 01, 2026. Unfreeze requires admin approval.';
+      alertBox.classList.remove('hidden');
+      confirmBtn.disabled = true;
+      confirmBtn.className = 'btn btn-ghost btn-lg grow center is-disabled';
+      confirmBtn.textContent = 'Cannot Admit (Frozen)';
+    }
+
+    cardContainer.style.display = 'block';
+  }
+
+  searchForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var val = searchInput.value.trim();
+    if (!val) {
+      searchError.textContent = 'Please enter a Member ID or phone number.';
+      searchError.classList.remove('hidden');
+      return;
+    }
+    loadMember(val);
+  });
+
+  // Demo buttons
+  document.querySelectorAll('.demo-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-id');
+      searchInput.value = id;
+      loadMember(id);
+    });
+  });
+
+  cancelBtn.addEventListener('click', function() {
+    cardContainer.style.display = 'none';
+    searchInput.value = '';
+    searchInput.focus();
+  });
+
+  // Confirm Check-In Action
+  confirmBtn.addEventListener('click', function() {
+    if (!currentMember || currentMember.status !== 'active') return;
+
+    var now = new Date();
+    var timeString = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+
+    // Add to table
+    var tbody = document.getElementById('checkins-tbody');
+    var visitId = 'v-' + Date.now();
+    var tr = document.createElement('tr');
+    tr.setAttribute('data-visit-id', visitId);
+    tr.style.background = '#D6F5E6';
+    tr.innerHTML = `
+      <td><strong>${timeString}</strong></td>
+      <td>
+        <strong>${currentMember.name}</strong>
+        <div class="muted" style="font-size:0.8rem;">#${currentMember.id}</div>
+      </td>
+      <td><span class="badge badge-ok">Standard</span></td>
+      <td>${currentMember.todayClass !== 'None' ? currentMember.todayClass : 'Gym Floor'}</td>
+      <td><button type="button" class="btn btn-sm btn-ghost checkout-btn" data-visit="${visitId}">Check Out</button></td>
+    `;
+    tbody.insertBefore(tr, tbody.firstChild);
+
+    // Update counts
+    var occ = document.getElementById('current-occupancy-count');
+    var tot = document.getElementById('total-today-count');
+    occ.textContent = parseInt(occ.textContent, 10) + 1;
+    tot.textContent = parseInt(tot.textContent, 10) + 1;
+
+    // Toast
+    toastMsg.textContent = currentMember.name + ' successfully admitted at ' + timeString + '.';
+    successToast.classList.remove('hidden');
+    cardContainer.style.display = 'none';
+    searchInput.value = '';
+    searchInput.focus();
+  });
+
+  // Checkout Handler
+  document.getElementById('checkins-tbody').addEventListener('click', function(e) {
+    if (e.target.classList.contains('checkout-btn')) {
+      var btn = e.target;
+      var now = new Date();
+      var timeString = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+      var td = btn.parentElement;
+      td.innerHTML = '<span class="muted" style="font-size:0.85rem;">Checked out (' + timeString + ')</span>';
+
+      var occ = document.getElementById('current-occupancy-count');
+      var current = parseInt(occ.textContent, 10);
+      if (current > 0) occ.textContent = current - 1;
+    }
+  });
+</script>
+
+</body>
+</html>
