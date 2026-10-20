@@ -52,7 +52,6 @@
   // Prototype only (no server yet):
   //  - empty password or the word "wrong" shows the error message
   //  - an email containing "admin" opens the admin pages
-  //  - an email containing "trainer" opens the trainer pages
   //  - any other email opens the member pages
   document.getElementById('login-form').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -60,13 +59,7 @@
     var pw = document.getElementById('password').value;
     var error = document.getElementById('login-error');
     if (email === '' || pw === '' || pw === 'wrong') { error.classList.remove('hidden'); return; }
-    if (email.indexOf('trainer') !== -1) {
-      window.location.href = 'trainer/';
-    } else if (email.indexOf('admin') !== -1) {
-      window.location.href = 'Admin/classes.html';
-    } else {
-      window.location.href = 'member/';
-    }
+    window.location.href = email.indexOf('admin') !== -1 ? 'adminA/members.html' : 'member/profile.html';
   });
 </script>
 

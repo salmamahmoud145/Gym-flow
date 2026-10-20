@@ -19,17 +19,18 @@
 </header>
 
 <div class="app">
+  <!-- Replace each "#" with your teammates' page once it exists -->
   <aside class="sidebar">
     <p class="sidebar-title">Admin area</p>
-    <a href="../adminE/dashboard.html">Dashboard</a>
+    <a href="#">Dashboard</a>
     <a class="is-active" href="members.html">Members</a>
-    <a href="../Admin/trainers.html">Trainers</a>
-    <a href="../admin/plans.html">Plans</a>
-    <a href="../Admin/classes.html">Classes</a>
-    <a href="../memberE/dashboard1.html#bookings">Bookings</a>
-    <a href="../admin/payments.html">Payments</a>
-    <a href="../adminE/checkin.html">Check-in</a>
-    <a href="../adminE/reports.html">Reports</a>
+    <a href="#">Trainers</a>
+    <a href="#">Plans</a>
+    <a href="#">Classes</a>
+    <a href="#">Bookings</a>
+    <a href="#">Payments</a>
+    <a href="#">Check-in</a>
+    <a href="#">Reports</a>
   </aside>
 
   <main class="main">
@@ -61,42 +62,29 @@
         </thead>
         <tbody>
           <tr><td>M-0101</td><td>Sara Ahmed</td><td>Premium</td><td>15 Jan 2027</td><td><span class="badge badge-ok">Active</span></td>
-              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><button type="button" class="text-action danger account-status-toggle">Suspend</button></td></tr>
+              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><a class="danger" href="#">Suspend</a></td></tr>
           <tr><td>M-0102</td><td>Youssef Nabil</td><td>Standard</td><td>02 Nov 2026</td><td><span class="badge badge-ok">Active</span></td>
-              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><button type="button" class="text-action danger account-status-toggle">Suspend</button></td></tr>
+              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><a class="danger" href="#">Suspend</a></td></tr>
           <tr><td>M-0103</td><td>Laila Hassan</td><td>Basic</td><td>19 Oct 2026</td><td><span class="badge badge-warn">Expiring</span></td>
-              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><button type="button" class="text-action danger account-status-toggle">Suspend</button></td></tr>
+              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><a class="danger" href="#">Suspend</a></td></tr>
           <tr><td>M-0104</td><td>Ahmed Tarek</td><td>Standard</td><td>30 Sep 2026</td><td><span class="badge badge-bad">Expired</span></td>
-              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><button type="button" class="text-action danger account-status-toggle">Suspend</button></td></tr>
+              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><a class="danger" href="#">Suspend</a></td></tr>
           <tr><td>M-0105</td><td>Nour Adel</td><td>Premium</td><td>23 Oct 2026</td><td><span class="badge badge-warn">Expiring</span></td>
-              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><button type="button" class="text-action danger account-status-toggle">Suspend</button></td></tr>
+              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><a class="danger" href="#">Suspend</a></td></tr>
           <tr><td>M-0106</td><td>Hana Fathy</td><td>Basic</td><td>-</td><td><span class="badge badge-off">Suspended</span></td>
-              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><button type="button" class="text-action account-status-toggle">Activate</button></td></tr>
+              <td class="table-actions"><a href="member_form.html">View</a><a href="member_form.html">Edit</a><a href="#">Activate</a></td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="row" style="margin-top:22px">
       <span class="muted">Showing 1 to 6 of 248 members</span>
-      <nav class="pager push" aria-label="Pagination unavailable in this prototype">
-        <span aria-disabled="true">&lt;</span><span class="is-active" aria-current="page">1</span><span aria-disabled="true">2</span><span aria-disabled="true">3</span><span aria-disabled="true">&gt;</span>
+      <nav class="pager push">
+        <a href="#">&lt;</a><a class="is-active" href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">&gt;</a>
       </nav>
     </div>
   </main>
 </div>
-
-<script>
-  document.querySelectorAll('.account-status-toggle').forEach(function(button) {
-    button.addEventListener('click', function() {
-      var status = this.closest('tr').querySelector('.badge');
-      var isSuspended = status.textContent.trim() === 'Suspended';
-      status.textContent = isSuspended ? 'Active' : 'Suspended';
-      status.className = 'badge ' + (isSuspended ? 'badge-ok' : 'badge-off');
-      this.textContent = isSuspended ? 'Suspend' : 'Activate';
-      this.classList.toggle('danger', !isSuspended);
-    });
-  });
-</script>
 
 </body>
 </html>

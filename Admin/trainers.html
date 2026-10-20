@@ -31,9 +31,11 @@
           <td>
             <a href="trainer_form.html?id=1">Edit</a>
             <form
+              method="post"
               style="display: inline"
-              onsubmit="event.preventDefault(); if (confirm('Delete this trainer?')) alert('This static prototype has no backend, so the trainer was not deleted.');"
+              onsubmit="return confirm('Delete this trainer?');"
             >
+              <input type="hidden" name="csrf" value="" />
               <input type="hidden" name="delete_id" value="1" />
               <button type="submit">Delete</button>
             </form>
